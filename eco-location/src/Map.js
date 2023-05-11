@@ -1,81 +1,85 @@
 import React from "react";
 import './css/Map.css';
-
 import boundaryData from "./boundary.json";
 
-// function marker(map, item) { // mapmarker사용x
-//   var markerPosition  = new window.kakao.maps.LatLng( item.lat, item.lng ); 
-//   var marker = new window.kakao.maps.Marker({ position: markerPosition });
-//   marker.setMap(map);
+function polygon(map, binary, item) { // 1회당 도/광역시 하나
+  // 배경색 변경 (테스트)
+  var backgroundColor = '#00'+ Math.floor(16-item.content/500).toString(16) +'F00';
 
-//   var infowindow = new window.kakao.maps.InfoWindow({
-//       position : markerPosition,
-//       content : '<div class="info">'+item.content+'</div>'
-//   });
+  // 이벤트
+  var customOverlay = new window.kakao.maps.CustomOverlay({});
+  // 마우스오버 - 배경색 변경 + 지역명 커스텀오버레이 표시
+  var mouseOverHandler = function(mouseEvent) {
+    polygons.forEach((polygon) => { polygon.setOptions({fillColor: '#FF0'}) });
 
-//   window.kakao.maps.event.addListener(marker, 'mouseover', function() {
-//       infowindow.open(map, marker);
-//   });
-//   window.kakao.maps.event.addListener(marker, 'mouseout', function() {
-//       infowindow.close();
-//   });
-// }
+    customOverlay.setContent('<div class="area">' + binary.properties.CTP_KOR_NM + '</div>');
+    customOverlay.setPosition(mouseEvent.latLng);
+    customOverlay.setMap(map);
+  };
+  
+  // 마우스이동 - 커스텀오버레이 위치 변경
+  var mouseMoveHandler = function(mouseEvent) {
+    customOverlay.setPosition(mouseEvent.latLng); 
+  };
+  
+  // 마우스아웃 - 배경색 원래대로 + 커스텀오버레이 제거 
+  var mouseOutHandler = function() {
+    polygons.forEach((polygon) => { polygon.setOptions({fillColor: backgroundColor}) });
+    
+    customOverlay.setMap(null);
+  };
+    
 
-function polygon(map, binary, item) {
-  console.log(binary.properties.CTP_KOR_NM, item.location);
+  // 구역 이름 라벨 생성
+  var content = document.createElement('div');
+  content.className = 'label';
+  if(item.location.length>4) {
+    content.innerHTML = item.location.substr(0,2);
+  } else {
+    content.innerHTML = item.location.substr(0,1) + item.location.substr(item.location.length-2,1);
+  }
+  var label = new window.kakao.maps.CustomOverlay({ // 찍기좋게 boundary파일에 수동으로 center값을 넣었습니다
+    position: new window.kakao.maps.LatLng(binary.geometry.center[1], binary.geometry.center[0]),  
+    content: content
+  });
+  label.setMap(map);
+
+  content.addEventListener("mouseover", () => polygons.forEach((polygon) => { polygon.setOptions({fillColor: '#FF0'}); }));
+  content.addEventListener("mouseout", () => polygons.forEach((polygon) => { polygon.setOptions({fillColor: backgroundColor}) }));
+  content.addEventListener("click", () => { // 마우스클릭 - 인포윈도우 켜기
+    var infowindow = new window.kakao.maps.InfoWindow({removable: true});
+    var content = '<div class="info"><div class="title">'+binary.properties.CTP_KOR_NM+'</div>'+item.content+'</div>';
+    infowindow.setContent(content);
+    infowindow.setPosition(label.n); 
+    infowindow.setMap(map);
+  });
+
+  
+  // 폴리곤 생성 (구역당 여러개일 수 있음)
+  var polygons = [];
   binary.geometry.coordinates.forEach((coors) => {
+    // 카카오 위도경도로 타입변환 (파일이랑 위도경도가 반대임)
     var path = [];
-    coors.forEach((coor) => { // 카카오 위도경도로 타입변환 (파일이랑 위도경도가 반대임!!!!!!!!)
+    coors.forEach((coor) => { 
       path.push(new window.kakao.maps.LatLng(coor[1], coor[0]));
     })
-    
+
+    // 폴리곤 그리기
     var polygon = new window.kakao.maps.Polygon({
-      path:path, // 그려질 다각형의 좌표 배열입니다
+      path:path, // 좌표 배열
       strokeWeight: 2,  // 선 두께
       strokeColor: '#004c80', // 선 색깔
-      fillColor: '#00'+ Math.floor(16-item.content/500).toString(16) +'F00', // 배경색 변경 테스트
+      fillColor: backgroundColor, 
       fillOpacity: 1 // 채우기 투명도
     });
     polygon.setMap(map);
+    polygons.push(polygon);
 
-    // 목표) 폴리곤 안에 글자(강원도, 경상북도...) 띄우고 싶음
-    // 문제) 폴리곤 위에 마우스가 움직일때 인식이 잘 안되는듯 엄청나게 깜박거림
-    
-    // var customOverlay = new window.kakao.maps.CustomOverlay({});
-    // var infowindow = new window.kakao.maps.InfoWindow({removable: true});
-  
-    // 마우스오버 - 배경색 변경 + 지역명 커스텀오버레이 표시
-    // window.kakao.maps.event.addListener(polygon, 'mouseover', function(mouseEvent) {
-    //   polygon.setOptions({fillColor: '#09f'});
-  
-    //   customOverlay.setContent('<div class="area">' + item.properties.CTP_KOR_NM + '</div>');
-    //   customOverlay.setPosition(mouseEvent.latLng); 
-    //   customOverlay.setMap(map);
-    // });
-  
-    // 마우스이동 - 커스텀오버레이 위치 변경 
-    // window.kakao.maps.event.addListener(polygon, 'mousemove', function(mouseEvent) {
-    //   customOverlay.setPosition(mouseEvent.latLng); 
-    // });
-  
-    // 마우스아웃 - 배경색 원래대로 + 커스텀오버레이 제거 
-    // window.kakao.maps.event.addListener(polygon, 'mouseout', function() {
-    //   polygon.setOptions({fillColor: '#fff'});
-    //   customOverlay.setMap(null);
-    // }); 
-  
-    // 마우스클릭 - 인포윈도우 켜기
-    // window.kakao.maps.event.addListener(polygon, 'click', function(mouseEvent) {
-    //   var content = '<div class="info">' + 
-    //               '   <div class="title">' + item.properties.CTP_KOR_NM + '</div>' +
-    //               '</div>';
-  
-    //   infowindow.setContent(content); 
-    //   infowindow.setPosition(mouseEvent.latLng); 
-    //   infowindow.setMap(map);
-    // });
-  })
-
+    // 이벤트 넣기
+    window.kakao.maps.event.addListener(polygon, 'mouseover', mouseOverHandler);
+    window.kakao.maps.event.addListener(polygon, 'mousemove', mouseMoveHandler);
+    window.kakao.maps.event.addListener(polygon, 'mouseout', mouseOutHandler);
+  });
 }
 
 class KakaoMap extends React.Component {
@@ -97,16 +101,16 @@ class KakaoMap extends React.Component {
       window.kakao.maps.load(() => {
         const container = document.getElementById('map');
         const options = {
-          center: new window.kakao.maps.LatLng(36.3, 128),  // lat은 세로 lng은 가로 
+          center: new window.kakao.maps.LatLng(36.2, 128),  // lat은 세로 lng은 가로 
           level: 13,
         };
         const map = new window.kakao.maps.Map(container, options);
+        map.setMapTypeId(window.kakao.maps.MapTypeId.SKYVIEW);
 
-        // 마커 그리기
-        // this.state.items.forEach((item) => {marker(map, item)});
-
-        // 다각형 그리기 (지역이름 맞춰서 데이터 넣어야하는데 일단 수동으로 정렬해서 돌림)
-        boundaryData.features.forEach((binary, index) => {polygon(map, binary, this.state.items[index])});
+        // 다각형 그리기
+        boundaryData.features.forEach((binary) => {
+          polygon(map, binary, this.state.items.find((item) => item.location===binary.properties.CTP_KOR_NM));
+        });
       });
     };
   }

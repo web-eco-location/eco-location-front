@@ -5,9 +5,19 @@ div.mapContainer {
 }
 div#map {
     width: 60%;
-    height: 500px;
+    height: 600px;
     border: 1px solid black;
     margin: 50px auto;
+}
+div.area {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #888;
+    border-radius: 3px;
+    font-size: 12px;
+    top: -5px;
+    left: 15px;
+    padding:2px;
 }
 div.info {
     /* text-align: center; */
@@ -15,4 +25,9 @@ div.info {
 }
 div.info > div.title {
     font-size: 14px;
+}
+div.label {
+    color: lightyellow;
+    text-shadow: -1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black;
+    font-weight: bold;
 }

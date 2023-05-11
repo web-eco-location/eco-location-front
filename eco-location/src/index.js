@@ -1,20 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './css/index.css';
-// import App from './App';
 import reportWebVitals from './reportWebVitals';
-// import TestPage from './TestPage';
-import Map from './Map';
 import Header from './Header';
+import AppRouter from './AppRouter';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Header />
-    {/* <App /> */}
-    <Map />
-    {/* <TestPage></TestPage> */}
+    <AppRouter />
   </React.StrictMode>
 );
 
