@@ -1,0 +1,41 @@
+div.container {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+div.pageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+div.side {
+  margin-top: 60px;
+}
+div.sourceLegend {
+  height: 320px;
+}
+div.range {
+  display: flex;
+}
+div.range > div.color {
+  width: 20px;
+  height: 20px;
+  margin: 6px;
+}
+div.range > div.lbl {
+  width: 160px;
+  line-height: 32px;
+  text-align: center;
+}
+div.buttonContainer {
+  height: 60px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+}
+div.buttonContainer > label {
+  margin: 4px;
+}
+input[type='radio'] {
+  accent-color: #232323;
+}

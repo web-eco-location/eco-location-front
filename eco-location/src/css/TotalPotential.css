@@ -1,0 +1,27 @@
+div.container {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+div.pageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid red;
+}
+div.totalLegend {
+  height: 320px;
+}
+div.totalLegend > div.range {
+  display: flex;
+}
+div.totalLegend > div.range > div.color {
+  width: 20px;
+  height: 20px;
+  margin: 6px;
+}
+div.totalLegend > div.range > div.lbl {
+  width: 200px;
+  line-height: 32px;
+  text-align: center;
+}
