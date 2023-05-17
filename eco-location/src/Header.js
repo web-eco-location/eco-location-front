@@ -27,7 +27,7 @@ class Header extends React.Component {
                         </div>
                     </div>
                     <div className="item">
-                        <Link to="/">기존 발전소</Link>
+                        <Link to="/Exist_Gen">기존 발전소</Link>
                         <div className="dropdown">
                             <Link to="/">지역별 발전소 확인</Link>
                             <Link to="/">발전원별 발전소 위치</Link>
