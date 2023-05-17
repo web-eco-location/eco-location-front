@@ -5,12 +5,12 @@ import { BrowserRouter, Routes, Route} from "react-router-dom";
 
 import Header from "./Header.js"
 
-import TotalPotential from "./TotalPotential";
-import SourcePotential from "./SourcePotential";
+// import TotalPotential from "./TotalPotential";
+// import SourcePotential from "./SourcePotential";
 // import Gen_total from './Gen_total';
 // import Gen_detail from './Gen_detail';
 // import Gen_year from './Gen_year';
-
+import API_Test_Page from './API_Test_Page';
 
 class AppRouter extends React.Component {
     render() {
@@ -27,14 +27,16 @@ class AppRouter extends React.Component {
                         {/* <Route path="/Gen_detail" element ={<Gen_detail />}></Route> */}
 
                         {/* 재생에너지 잠재력 확인 */}
-                        <Route path="/potential_total" element={<TotalPotential/>}></Route>
+                        {/* <Route path="/potential_total" element={<TotalPotential/>}></Route>
                         <Route path="/potential_source" element={<SourcePotential/>}></Route>
-                        <Route path="/potential_year" element={<TotalPotential/>}></Route>
+                        <Route path="/potential_year" element={<TotalPotential/>}></Route> */}
                         
                         {/* 기존 발전소 */}
-
+                        
                         {/* 재생에너지 전환율 */}
 
+                        {/* API 테스트용 페이지 */}
+                        <Route path="/test_page" element={<API_Test_Page/>}></Route>
 
                     </Routes>
                 </div>
