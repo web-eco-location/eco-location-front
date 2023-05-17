@@ -1,15 +1,41 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import App from "./App";
+import "./css/index.css";
+
+import { BrowserRouter, Routes, Route} from "react-router-dom";
+
+import Header from "./Header.js"
+
+import TotalPotential from "./TotalPotential";
+import SourcePotential from "./SourcePotential";
+// import Gen_total from './Gen_total';
+// import Gen_detail from './Gen_detail';
+// import Gen_year from './Gen_year';
+
 
 class AppRouter extends React.Component {
     render() {
-        return(
+        return (
             <BrowserRouter>
+                <Header/>
                 <div>
                     <Routes>
-                        {/* 미완 */}
-                        <Route path="/chat" element={<App />} /> 
+                        {/* <Route path="/" element={<TestPage />}></Route> */}
+                        
+                        {/* 과거 재생에너지 발전량 */}
+                        {/* <Route path="/Gen_total" element={<Gen_total />}></Route> */}
+                        {/* <Route path="/Gen_year" element ={<Gen_year />}></Route> */}
+                        {/* <Route path="/Gen_detail" element ={<Gen_detail />}></Route> */}
+
+                        {/* 재생에너지 잠재력 확인 */}
+                        <Route path="/potential_total" element={<TotalPotential/>}></Route>
+                        <Route path="/potential_source" element={<SourcePotential/>}></Route>
+                        <Route path="/potential_year" element={<TotalPotential/>}></Route>
+                        
+                        {/* 기존 발전소 */}
+
+                        {/* 재생에너지 전환율 */}
+
+
                     </Routes>
                 </div>
             </BrowserRouter>
