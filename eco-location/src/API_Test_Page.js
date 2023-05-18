@@ -13,7 +13,7 @@ import {
   AreaGeneratorSource_Area_Period } 
   from "./service/ApiService";
 
-class Test_Page extends React.Component {
+class API_Test_Page extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -395,4 +395,4 @@ class Test_Page extends React.Component {
   }
 }
 
-export default Test_Page;
+export default API_Test_Page;
