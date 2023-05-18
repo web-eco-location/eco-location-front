@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/TotalPotential.css';
-import KakaoMap from './Map';
+import KakaoMap from './PotentialMap';
 
 class YearPotential extends React.Component { // 지역별 잠재량 페이지
   constructor(props) {  
@@ -11,26 +11,6 @@ class YearPotential extends React.Component { // 지역별 잠재량 페이지
       loading: true,
     };
   }
-
-//   legend = () => {
-//     var legendContainer = document.querySelector(".totalLegend");
-//     legendContainer.innerHTML = "";
-
-//     var maxValue = this.state.items.reduce((max, p) => p.data > max ? p.data : max, this.state.items[0].data); 
-//     var minValue = this.state.items.reduce((min, p) => p.data < min ? p.data : min, this.state.items[0].data); 
-//     var d = (maxValue-minValue+1)/10;
-
-//     for(var i=0; i<10; i++) {
-//       var backgroundColor = "#00"+(15-i).toString(16)+"F00";
-//       var range = document.createElement("div");
-//       range.className = "range";
-//       range.innerHTML = "<div class='color' style='background-color:"+backgroundColor+"'></div>"+
-//                         "<div class='lbl'>"+ 
-//                           Math.round((minValue+i*d)*100)/100 + " - " + Math.round((minValue+(i+1)*d-1)*100)/100 +
-//                         "</div>";
-//       legendContainer.appendChild(range);
-//     }
-//   };
   
   componentDidMount() {
     // call("/potential/total", "GET", null).then((response) =>
@@ -38,7 +18,6 @@ class YearPotential extends React.Component { // 지역별 잠재량 페이지
     // );
 
     // 테스트용 데이터
-    // 디스 데이터 이즈 잠재량
     var testData = [
       {	"area": "gangwonDo","data": 494470.7381649313 },
       { "area": "jejuIsland", "data": 423423.2322175159 },
@@ -49,19 +28,6 @@ class YearPotential extends React.Component { // 지역별 잠재량 페이지
       { "area": "gyeongsangbukDo", "data": 747818.4639277749 },
       { "area": "gyeongsangnamDo", "data": 715344.7420174808 }
       
-      // { "area":"광주광역시", content:1000},
-      // { "area":"대구광역시", content:1000},
-      // { "area":"대전광역시", content:1000},
-      // { "area":"부산광역시", content:1000},
-      // { "area":"서울특별시", content:100},
-      // { "area":"세종특별자치시", content:2000},
-      // { "area":"울산광역시", content:1000},
-      // { "area":"인천광역시", content:1000},
-      // { "area": "gyeongsangnamDo", "data": 715344.7420174808 }
-      // { "area": "gyeongsangnamDo", "data": 715344.7420174808 }
-      // { "area": "gyeongsangnamDo", "data": 715344.7420174808 }
-      // { "area": "gyeongsangnamDo", "data": 715344.7420174808 }
-      // { "area": "gyeongsangnamDo", "data": 715344.7420174808 }
     ];
     // this.setState({items:testData, loading:false}, this.legend);
   }
@@ -88,7 +54,7 @@ class YearPotential extends React.Component { // 지역별 잠재량 페이지
 
     return(
       <div className='container'>
-        {content}
+        {/* {content} */}
       </div>
     );
   }
