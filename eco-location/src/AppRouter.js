@@ -11,7 +11,6 @@ import TotalPotential from "./TotalPotential";
 // import Gen_detail from './Gen_detail';
 // import Gen_year from './Gen_year';
 import API_Test_Page from './API_Test_Page';
-import TestPage from "./TestPage";
 
 class AppRouter extends React.Component {
     render() {
@@ -20,7 +19,7 @@ class AppRouter extends React.Component {
                 <Header/>
                 <div>
                     <Routes>
-                        <Route path="/" element={<TestPage />}></Route>
+                        {/* <Route path="/" element={<TestPage />}></Route> */}
                         
                         {/* 과거 재생에너지 발전량 */}
                         {/* <Route path="/Gen_total" element={<Gen_total />}></Route> */}
