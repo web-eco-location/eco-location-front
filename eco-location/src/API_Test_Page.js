@@ -94,7 +94,7 @@ class API_Test_Page extends React.Component {
         });
       });
   };
-
+  
   handle_GenArea_Count_Search = () => {
     const { areacount } = this.state;
     Generator_DetailArea_Count(areacount)

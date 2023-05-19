@@ -5,8 +5,8 @@ import { BrowserRouter, Routes, Route} from "react-router-dom";
 
 import Header from "./Header.js"
 
-// import TotalPotential from "./TotalPotential";
-// import SourcePotential from "./SourcePotential";
+import TotalPotential from "./TotalPotential";
+// import YearPotential from "./YearPotential";
 // import Gen_total from './Gen_total';
 // import Gen_detail from './Gen_detail';
 // import Gen_year from './Gen_year';
@@ -27,9 +27,8 @@ class AppRouter extends React.Component {
                         {/* <Route path="/Gen_detail" element ={<Gen_detail />}></Route> */}
 
                         {/* 재생에너지 잠재력 확인 */}
-                        {/* <Route path="/potential_total" element={<TotalPotential/>}></Route>
-                        <Route path="/potential_source" element={<SourcePotential/>}></Route>
-                        <Route path="/potential_year" element={<TotalPotential/>}></Route> */}
+                        <Route path="/potential_total" element={<TotalPotential/>}></Route>
+                        {/* <Route path="/potential_year" element={<YearPotential/>}></Route> */}
                         
                         {/* 기존 발전소 */}
                         

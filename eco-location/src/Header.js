@@ -22,7 +22,6 @@ class Header extends React.Component {
                         <Link to="/potential_total">재생에너지 잠재량 확인</Link>
                         <div className="dropdown">
                             <Link to="/potential_total">지역별 잠재량</Link>
-                            <Link to="/potential_source">발전원별 잠재량</Link>
                             <Link to="/potential_year">시간별 잠재량</Link>
                         </div>
                     </div>

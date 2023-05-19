@@ -71,7 +71,6 @@ export function Generator_powerSource(powerSource){
         });
 }
 
-
 // 해당 지역의 발전소 종류(갯수만) 리스트 가져오기
 // 광역지자체 + 시군구 단위로 검색 (ex : 경상북도 경산시)
 export function Generator_DetailArea_Count(Area){
