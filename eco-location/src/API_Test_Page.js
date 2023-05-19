@@ -28,6 +28,7 @@ class API_Test_Page extends React.Component {
       source_date:"",
       source_startdate:"",
       source_enddate:"",
+      extractedData:[],
       responseJson: null,
       error: null
     };
@@ -41,6 +42,7 @@ class API_Test_Page extends React.Component {
           responseJson: response,
           error: null
         });
+        this.get_GenArea_Data(response);
       })
       .catch((error) => {
         console.log(error);
@@ -49,6 +51,30 @@ class API_Test_Page extends React.Component {
           error: error
         });
       });
+  };
+
+  get_GenArea_Data = (jsonData) => {
+    const extractedData = [];
+
+    if (jsonData) {
+      try {
+        const data = jsonData;
+
+        for (const obj of data) {
+          const id = obj.id;
+          const generatorName = obj.generatorName;
+          const detailArea = obj.detailArea;
+          const powerSource = obj.powerSource;
+
+          extractedData.push({ id, generatorName, detailArea, powerSource });
+        }
+
+        this.setState({ extractedData });
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   handle_GenSource_Search = () => {
@@ -295,28 +321,28 @@ class API_Test_Page extends React.Component {
   };
 
   render() {
-    const { area, source, areacount, potential_year_sum, potential_year, potential_start, potential_end, source_date, source_area, source_startdate, source_enddate, responseJson, error } = this.state;
+    const { area, source, areacount, potential_year_sum, potential_year, potential_start, potential_end, source_date, source_area, source_startdate, source_enddate, extractedData, responseJson, error } = this.state;
 
     return (
       <div>
         <div>--- 지역별 발전소 상세정보 ---</div>
 
         <div style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
-          <div>지역별 발전소 상세정보 데이터 가져오기 예시</div>
+          <div>지역별 발전소 상세정보 데이터 가져오기 예시(ex : 경상북도 경산시)</div>
           <input type="text" value={area} onChange={this.handle_area_Change} />
           <button onClick={this.handle_GenArea_Search}>검색하기</button>
           {error && <div>Error: {error.message}</div>}
         </div>
 
         <div style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
-          <div>발전원별 발전소 상세정보 데이터 가져오기 예시</div>
+          <div>발전원별 발전소 상세정보 데이터 가져오기 예시(ex : 수력에너지)</div>
           <input type="text" value={source} onChange={this.handle_source_Change} />
           <button onClick={this.handle_GenSource_Search}>검색하기</button>
           {error && <div>Error: {error.message}</div>}
         </div>
 
         <div style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
-          <div>지역별 발전소 종류(갯수) 데이터 가져오기 예시</div>
+          <div>지역별 발전소 종류(갯수) 데이터 가져오기 예시(ex : 경상북도 경산시)</div>
           <input type="text" value={areacount} onChange={this.handle_area_count_Change} />
           <button onClick={this.handle_GenArea_Count_Search}>검색하기</button>
           {error && <div>Error: {error.message}</div>}
@@ -384,12 +410,26 @@ class API_Test_Page extends React.Component {
           <button onClick={this.handle_AreaGeneratorSource_Area_Period_Search}>검색하기</button>
           {error && <div>Error: {error.message}</div>}
         </div>
+        
+        <div>--- 받아온 JSON 객체를 받아와서 배열로 매핑한 것 표시 ---</div>
+        <div style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
+        {extractedData.map((obj) => (
+            <div key={obj.id}>
+              <p>ID: {obj.id}</p>
+              <p>Generator Name: {obj.generatorName}</p>
+              <p>Detail Area: {obj.detailArea}</p>
+              <p>Power Source: {obj.powerSource}</p>
+            </div>
+          ))
+          // extractedData[0]같은 방식으로도 사용 가능
+        }
+        </div>
 
         <div>--- 받아온 JSON 표시 ---</div>
-
         <div style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
           <pre>{responseJson && JSON.stringify(responseJson, null, 2)}</pre>
         </div>
+
       </div>
     );
   }
