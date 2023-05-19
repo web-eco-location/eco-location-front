@@ -2,14 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './css/index.css';
 import reportWebVitals from './reportWebVitals';
+<<<<<<< HEAD
 import AppRouter from "./AppRouter.js"
+=======
+import AppRouter from './AppRouter';
+>>>>>>> eundo2
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+<<<<<<< HEAD
   <React.StrictMode>
     <AppRouter/>
   </React.StrictMode>
+=======
+    <React.StrictMode>
+        <AppRouter/>
+    </React.StrictMode>
+>>>>>>> eundo2
 );
 
 // If you want to start measuring performance in your app, pass a function

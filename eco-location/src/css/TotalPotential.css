@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 div.container { 
+=======
+div.container {
+>>>>>>> eundo2
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -7,6 +11,7 @@ div.pageContainer {
   display: flex;
   justify-content: center;
   align-items: center;
+<<<<<<< HEAD
   border: 1px solid red;
 }
 div.totalLegend {
@@ -16,12 +21,72 @@ div.totalLegend > div.range {
   display: flex;
 }
 div.totalLegend > div.range > div.color {
+=======
+  height: calc(100vh - 50px);
+  position: relative;
+}
+/* 지도안의 컨트롤러 */
+div.sideController {
+  margin-top: 60px;
+  background-color: wheat;
+  position: absolute;
+  top:0px;
+  right: 25vw;
+  margin: 20px;
+  z-index: 5;
+}
+div.legendContainer {
+  border: 2px solid orange;
+}
+div.legendContainer > div.range {
+  display: flex;
+}
+div.legendContainer > div.range > div.color {
+>>>>>>> eundo2
   width: 20px;
   height: 20px;
   margin: 6px;
 }
+<<<<<<< HEAD
 div.totalLegend > div.range > div.lbl {
+=======
+div.legendContainer > div.range > div.lbl {
+>>>>>>> eundo2
   width: 200px;
   line-height: 32px;
   text-align: center;
 }
+<<<<<<< HEAD
+=======
+div.checkboxContainer {
+  border: 2px solid yellow;
+  display: flex;
+  flex-direction: column;
+}
+div.checkboxContainer > label {
+  margin: 4px;
+}
+label > input[type='checkbox'] {
+  accent-color: #232323;
+}
+/* 지도 우측 사이드 */
+div.side {
+  width: 25vw;
+  /* height: calc(100% - 20px); */
+  height: 100%;
+  background-color: white;
+  border: 1px solid gray;
+  padding: 16px;
+  box-sizing: border-box;
+}
+div.side > div.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+div.small {
+  font-size: 10px;
+  margin-bottom: 10px;
+  text-align: right;
+}
+>>>>>>> eundo2

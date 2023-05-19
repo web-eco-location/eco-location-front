@@ -2,6 +2,7 @@ div.mapContainer {
     padding: 0;
     margin: 0;
     box-sizing: content-box;
+<<<<<<< HEAD
     width: 1000px; 
     height: 100%;
 }
@@ -9,7 +10,19 @@ div#map {
     height: 500px;
     border: 1px solid black;
     margin: 50px 30px;
+=======
+    width: 75vw;
+    height: 600px;
+    height: 100%;
 }
+div#map {
+    width: 100%;
+    height: 100%;
+    /* border: 1px solid black; */
+>>>>>>> eundo2
+}
+
+/* 호버 - 커스텀 오버레이 */
 div.area {
     position: absolute;
     background: #fff;
@@ -20,15 +33,19 @@ div.area {
     left: 15px;
     padding:2px;
 }
-div.info {
-    /* text-align: center; */
+
+/* 클릭 - 인포윈도우 */
+/* div.info {
     justify-content: center;
 }
 div.info > div.title {
     font-size: 14px;
-}
+} */
+
+/* 구역이름 표시 - 커스텀 오버레이 */
 div.label {
     color: lightyellow;
     text-shadow: -1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black;
+    font-size: 18px;
     font-weight: bold;
 }
