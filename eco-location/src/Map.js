@@ -1,10 +1,10 @@
 import React from "react";
 import './css/Map.css';
-import boundaryData from "./boundary.json";
-
-function polygon(map, binary, item) { // 1회당 도/광역시 하나
-  // 배경색 변경 (테스트)
-  var backgroundColor = '#00'+ Math.floor(16-item.content/500).toString(16) +'F00';
+import boundaryData from "./boundary_potential.json";
+ 
+function polygon(map, boundary, bg, data) { // 1회당 도/광역시 하나
+  // 배경색 변경
+  var backgroundColor = bg[2]+ Math.floor(15-(data-bg[0])/bg[1]).toString(16) +bg[3];
 
   // 이벤트
   var customOverlay = new window.kakao.maps.CustomOverlay({});
@@ -12,7 +12,7 @@ function polygon(map, binary, item) { // 1회당 도/광역시 하나
   var mouseOverHandler = function(mouseEvent) {
     polygons.forEach((polygon) => { polygon.setOptions({fillColor: '#FF0'}) });
 
-    customOverlay.setContent('<div class="area">' + binary.properties.CTP_KOR_NM + '</div>');
+    customOverlay.setContent('<div class="area">' + boundary.properties.CTP_KOR_NM + '</div>');
     customOverlay.setPosition(mouseEvent.latLng);
     customOverlay.setMap(map);
   };
@@ -29,17 +29,16 @@ function polygon(map, binary, item) { // 1회당 도/광역시 하나
     customOverlay.setMap(null);
   };
     
-
   // 구역 이름 라벨 생성
   var content = document.createElement('div');
   content.className = 'label';
-  if(item.location.length>4) {
-    content.innerHTML = item.location.substr(0,2);
+  if(boundary.properties.CTP_KOR_NM.length>4) {
+    content.innerHTML = boundary.properties.CTP_KOR_NM.substr(0,2);
   } else {
-    content.innerHTML = item.location.substr(0,1) + item.location.substr(item.location.length-2,1);
+    content.innerHTML = boundary.properties.CTP_KOR_NM.substr(0,1) + boundary.properties.CTP_KOR_NM.substr(boundary.properties.CTP_KOR_NM.length-2,1);
   }
   var label = new window.kakao.maps.CustomOverlay({ // 찍기좋게 boundary파일에 수동으로 center값을 넣었습니다
-    position: new window.kakao.maps.LatLng(binary.geometry.center[1], binary.geometry.center[0]),  
+    position: new window.kakao.maps.LatLng(boundary.geometry.center[1], boundary.geometry.center[0]),  
     content: content
   });
   label.setMap(map);
@@ -48,7 +47,7 @@ function polygon(map, binary, item) { // 1회당 도/광역시 하나
   content.addEventListener("mouseout", () => polygons.forEach((polygon) => { polygon.setOptions({fillColor: backgroundColor}) }));
   content.addEventListener("click", () => { // 마우스클릭 - 인포윈도우 켜기
     var infowindow = new window.kakao.maps.InfoWindow({removable: true});
-    var content = '<div class="info"><div class="title">'+binary.properties.CTP_KOR_NM+'</div>'+item.content+'</div>';
+    var content = '<div class="info"><div class="title">'+boundary.properties.CTP_KOR_NM+'</div>'+data+'</div>';
     infowindow.setContent(content);
     infowindow.setPosition(label.n); 
     infowindow.setMap(map);
@@ -57,7 +56,7 @@ function polygon(map, binary, item) { // 1회당 도/광역시 하나
   
   // 폴리곤 생성 (구역당 여러개일 수 있음)
   var polygons = [];
-  binary.geometry.coordinates.forEach((coors) => {
+  boundary.geometry.coordinates.forEach((coors) => {
     // 카카오 위도경도로 타입변환 (파일이랑 위도경도가 반대임)
     var path = [];
     coors.forEach((coor) => { 
@@ -72,6 +71,9 @@ function polygon(map, binary, item) { // 1회당 도/광역시 하나
       fillColor: backgroundColor, 
       fillOpacity: 1 // 채우기 투명도
     });
+    if(content.innerHTML=="광주"){
+      polygon.setZIndex(1);
+    } 
     polygon.setMap(map);
     polygons.push(polygon);
 
@@ -82,10 +84,43 @@ function polygon(map, binary, item) { // 1회당 도/광역시 하나
   });
 }
 
+function map(by, items) {  // 맵 그리는 함수
+  const container = document.getElementById('map');
+  const options = {
+    center: new window.kakao.maps.LatLng(35.8, 128),  // lat은 세로 lng은 가로 
+    level: 13,
+  };
+  const map = new window.kakao.maps.Map(container, options);
+  // map.setMapTypeId(window.kakao.maps.MapTypeId.SKYVIEW);
+
+  // 배경색 계산용
+  var maxValue, minValue, d;
+  
+  // 다각형 그리기
+  items.forEach((item) => { // 차마 눈뜨고 못봐줄 코드...
+    if(by=="total") {
+      maxValue = items.reduce((max, p) => p.data > max ? p.data : max, items[0].data); 
+      minValue = items.reduce((min, p) => p.data < min ? p.data : min, items[0].data); 
+      d = (maxValue-minValue+1)/10;
+      polygon(map, boundaryData.features.find((b) => b.properties.CTP_ENG_NM==item.area), [minValue, d, "#00", "F00"], item.data);
+    } else if(by=="source1") {
+      maxValue = items.reduce((max, p) => p.potentialOfSolar > max ? p.potentialOfSolar : max, items[0].potentialOfSolar); 
+      minValue = items.reduce((min, p) => p.potentialOfSolar < min ? p.potentialOfSolar : min, items[0].potentialOfSolar); 
+      d = (maxValue-minValue+1)/10;
+      polygon(map, boundaryData.features.find((b) => b.properties.CTP_ENG_NM==item.area), [minValue, d, "#", "F0000"], item.potentialOfSolar);
+    } else if(by=="source2") {
+      maxValue = items.reduce((max, p) => p.potentialOfWind > max ? p.potentialOfWind : max, items[0].potentialOfWind); 
+      minValue = items.reduce((min, p) => p.potentialOfWind < min ? p.potentialOfWind : min, items[0].potentialOfWind); 
+      d = (maxValue-minValue+1)/10;
+      polygon(map, boundaryData.features.find((b) => b.properties.CTP_ENG_NM==item.area), [minValue, d, "#0000", "F"], item.potentialOfWind);
+    }
+  });
+}
+
 class KakaoMap extends React.Component {
-  constructor(props) {  
-    super(props);
-    this.state = { items: props.items };
+  componentDidUpdate() {
+    // 지도 그리기
+    window.kakao.maps.load(() => {map(this.props.by, this.props.items)});
   }
 
   componentDidMount() {
@@ -97,47 +132,10 @@ class KakaoMap extends React.Component {
     document.head.appendChild(script);
 
     // 지도 그리기
-    script.onload = () => {
-      window.kakao.maps.load(() => {
-        const container = document.getElementById('map');
-        const options = {
-          center: new window.kakao.maps.LatLng(36.2, 128),  // lat은 세로 lng은 가로 
-          level: 13,
-        };
-        const map = new window.kakao.maps.Map(container, options);
-        map.setMapTypeId(window.kakao.maps.MapTypeId.SKYVIEW);
-
-        // 다각형 그리기
-        boundaryData.features.forEach((binary) => {
-          polygon(map, binary, this.state.items.find((item) => item.location===binary.properties.CTP_KOR_NM));
-        });
-      });
-    };
+    script.onload = () => { window.kakao.maps.load(() => {map(this.props.by, this.props.items)}) };
   }
 
   render() {
-    // 테스트용 데이터, 값을 아예 안주면 undefined
-    var testData = [
-      {location:"강원도", content:4000},
-      {location:"경기도", content:3000},
-      {location:"경상남도", content:4000},
-      {location:"경상북도", content:3000},
-      {location:"광주광역시", content:1000},
-      {location:"대구광역시", content:1000},
-      {location:"대전광역시", content:1000},
-      {location:"부산광역시", content:1000},
-      {location:"서울특별시", content:100},
-      {location:"세종특별자치시", content:2000},
-      {location:"울산광역시", content:1000},
-      {location:"인천광역시", content:1000},
-      {location:"전라남도", content:4000},
-      {location:"전라북도", content:3000},
-      {location:"제주특별자치도", content:5000},
-      {location:"충청남도", content:4000},
-      {location:"충청북도", content:3000},
-    ];
-    this.state.items = testData;
-
     return(
       <div className="mapContainer">
         <div id="map"></div>

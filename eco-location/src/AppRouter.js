@@ -5,12 +5,21 @@ import { BrowserRouter, Routes, Route} from "react-router-dom";
 
 import Header from "./Header.js"
 
+<<<<<<< HEAD
 // import TotalPotential from "./TotalPotential";
 // import SourcePotential from "./SourcePotential";
 // import Gen_total from './Gen_total';
 // import Gen_detail from './Gen_detail';
 // import Gen_year from './Gen_year';
 import API_Test_Page from './API_Test_Page';
+=======
+//import TotalPotential from "./TotalPotential";
+//import SourcePotential from "./SourcePotential";
+// import Gen_total from './Gen_total';
+// import Gen_detail from './Gen_detail';
+// import Gen_year from './Gen_year';
+import Exist_Gen from './Exist_Gen';
+>>>>>>> feature/exist-generator
 
 class AppRouter extends React.Component {
     render() {
@@ -32,7 +41,12 @@ class AppRouter extends React.Component {
                         <Route path="/potential_year" element={<TotalPotential/>}></Route> */}
                         
                         {/* 기존 발전소 */}
+<<<<<<< HEAD
                         
+=======
+                        <Route path="/exist_gen" element={<Exist_Gen/>}></Route>
+
+>>>>>>> feature/exist-generator
                         {/* 재생에너지 전환율 */}
 
                         {/* API 테스트용 페이지 */}
