@@ -62,8 +62,14 @@ div.side > div.title {
   font-weight: bold;
   margin-bottom: 10px;
 }
+div.year {
+  font-size: 10px;
+  margin-bottom: 10px;
+  text-align: right;
+}
 div.small {
   font-size: 10px;
   margin-bottom: 10px;
   text-align: right;
+  margin-right: 10px;
 }

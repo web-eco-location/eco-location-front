@@ -1,0 +1,12 @@
+div.container {
+    border: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+div.datetimeContainer {
+    text-align: center;
+}
+div.datetimeContainer > input {
+    height: 24px;
+    margin: 20px 8px;
+}

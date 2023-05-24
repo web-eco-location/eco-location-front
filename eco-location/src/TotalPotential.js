@@ -60,7 +60,7 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
         
         var unit = document.createElement("div");
         unit.className = "small";
-        unit.innerHTML = "단위: kW"
+        unit.innerHTML = "단위: W"
         legendContainer.appendChild(unit);
 
         this.sideInfo();
@@ -94,18 +94,18 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
         const year = new Date().getFullYear() -1;
         if(this.state.by==="total") {
             var data = this.state.totalData.find((d) => d.areaName===areaName);
-            side.innerHTML = "<div class='title'>"+data.areaName+" 발전량 총합</div>"+
-                            "<div class='info'>"+data.potentialAmount+"Wh</div>"+
+            side.innerHTML = "<div class='title'>"+data.areaName+" 잠재량 총합</div>"+
+                            "<div class='info'>"+data.potentialAmount+"W</div>"+
                             "<div class='small'>*"+year+"년 자료</div>";
         } else if(this.state.by==="source1") {
             var data = this.state.sourceData.find((d) => d.areaName===areaName);
-            side.innerHTML = "<div class='title'>"+data.areaName+" 태양에너지 발전량 총합</div>"+
-                            "<div class='info'>"+data.solarEnergyPotential+"Wh</div>"+
+            side.innerHTML = "<div class='title'>"+data.areaName+" 태양에너지 잠재량 총합</div>"+
+                            "<div class='info'>"+data.solarEnergyPotential+"W</div>"+
                             "<div class='year'>*"+year+"년 자료</div>";
         } else if(this.state.by==="source2") {
             var data = this.state.sourceData.find((d) => d.areaName===areaName);
-            side.innerHTML = "<div class='title'>"+data.areaName+" 풍력에너지 발전량 총합</div>"+
-                            "<div class='info'>"+data.windEnergyPotential+"Wh</div>"+
+            side.innerHTML = "<div class='title'>"+data.areaName+" 풍력에너지 잠재량 총합</div>"+
+                            "<div class='info'>"+data.windEnergyPotential+"W</div>"+
                             "<div class='year'>*"+year+"년 자료</div>";
         }
         

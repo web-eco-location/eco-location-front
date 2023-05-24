@@ -1,63 +1,155 @@
 import React from 'react';
-import './css/TotalPotential.css';
-import KakaoMap from './PotentialMap';
+import './css/YearPotential.css';
+import testData from "./testData.json";
+import PotentialGraph from './PotentialGraph';
 
-class YearPotential extends React.Component { // 지역별 잠재량 페이지
-  constructor(props) {  
-    super(props);
-    this.state = {
-      by: "year",
-      items: [],
-      loading: true,
-    };
-  }
-  
-  componentDidMount() {
-    // call("/potential/total", "GET", null).then((response) =>
-    //   this.setState({items:response.data, loading:false}, this.legend)
-    // );
+class YearPotential extends React.Component { // 시간별 잠재량 페이지
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: [],
+            isEmpty: true,
+            loading: true
+        };
+    }
+    
+    drawGraph = () => { // 말이 draw지 사실상 componentDidUpdate 그런데 datetime만 반응하는
+        if(!this.state.startDate||!this.state.startTime||!this.state.endDate||!this.state.endTime) {
+            this.setState({isEmpty: true});
+            return;
+        }
 
-    // 테스트용 데이터
-    var testData = [
-      {	"area": "gangwonDo","data": 494470.7381649313 },
-      { "area": "jejuIsland", "data": 423423.2322175159 },
-      { "area": "gyeonggiDo", "data": 368545.6747648805 },
-      { "area": "jeollabukDo", "data": 409799.93973072513 },
-      { "area": "jeollanamDo", "data": 2000243.1579725298 },
-      { "area": "chungcheongDo", "data": 1087404.0848657144 },
-      { "area": "gyeongsangbukDo", "data": 747818.4639277749 },
-      { "area": "gyeongsangnamDo", "data": 715344.7420174808 }
-      
-    ];
-    // this.setState({items:testData, loading:false}, this.legend);
-  }
-  
-  render() {
-    // var map = this.state.items.length>0 && (
-    //   <KakaoMap by={this.state.by} items={this.state.items}/>
-    // );
+        // 사용자로부터 입력받은 날짜와 시간
+        var start = this.state.startDate + " " + this.state.startTime + ":00";
+        var end = this.state.endDate + " " + this.state.endTime + ":00";
+        
+        // start가 더 늦을경우
+        if(new Date(start)>new Date(end)) {
+            var tmp = start;
+            start = end;
+            end = tmp;
+        }
+        console.log(start+"&to="+end);
+        
+        // 실제 데이터 요청
+        // call("/energy-potential?from="+start+"&to="+end, "GET", null).then((response) =>
+        //     this.setState({items:this.dataCleaning(response.data)})
+        // );
+        
+        // 예시 데이터
+        this.setState({items:this.dataCleaning(testData), isEmpty: false, loading:false});
+    }
 
-    // var totalPotentialPage = (
-    //   <div className='pageContainer'>
-    //     {map}
-    //     <div className='totalLegend'></div>
-    //   </div>
-    // );
+    handleChange = (event) => {
+        const { name, value } = event.target;
+        this.setState({ [name]: value }, this.drawGraph);
+    }
 
-    // var loadingPage = <h1>...</h1>
-    // var content = loadingPage;
+    dataCleaning = function(items) {
+        // 실전 코드
+        // 변수명이 어째서 korean인가 하면 표 그릴때 keys 이름 바꾸는 법을 모르겠습니다
+        // var result = [
+        //     { "areaName": "전라남도", "태양에너지":0, "풍력":0 },
+        //     { "areaName": "경상북도", "태양에너지":0, "풍력":0 },
+        //     { "areaName": "강원도", "태양에너지":0, "풍력":0 },
+        //     { "areaName": "제주도", "태양에너지":0, "풍력":0 },
+        //     { "areaName": "충청도", "태양에너지":0, "풍력":0 },
+        //     { "areaName": "경상남도", "태양에너지":0, "풍력":0 },
+        //     { "areaName": "전라북도", "태양에너지":0, "풍력":0 },
+        //     { "areaName": "경기도", "태양에너지":0, "풍력":0 }
 
-    // if(!this.state.loading) {
-    //   console.log("loading end");
-    //   content = totalPotentialPage;
-    // }
+        // ];
+        // items.forEach((item) => { 
+        //     if(item.powerType==="1") {
+        //         var area = result.find((a) => a.areaName===item.areaName);
+        //         area.태양에너지 += item.forecastEnergyPotential;
+        //     } else {
+        //         var area = result.find((a) => a.areaName===item.areaName);
+        //         area.풍력 += item.forecastEnergyPotential;
+        //     }
+        // });
 
-    return(
-      <div className='container'>
-        {/* {content} */}
-      </div>
-    );
-  }
+        // 정리-미리한 예시 데이터 (3000건 정리 금방됨)
+        var result = [
+            {
+                "areaName": "전라남도",
+                "태양에너지": 46220.013141376,
+                "풍력": 3186948.5441599987
+            },
+            {
+                "areaName": "경상북도",
+                "태양에너지": 17433.175799160996,
+                "풍력": 25185501.634600006
+            },
+            {
+                "areaName": "강원도",
+                "태양에너지": 9630.720590723,
+                "풍력": 3199929.0155000016
+            },
+            {
+                "areaName": "제주도",
+                "태양에너지": 10381.792448657998,
+                "풍력": 11914936.443757989
+            },
+            {
+                "areaName": "충청도",
+                "태양에너지": 22967.303496292006,
+                "풍력": 13956.789298790005
+            },
+            {
+                "areaName": "경상남도",
+                "태양에너지": 17141.334741592997,
+                "풍력": 711362.407186
+            },
+            {
+                "areaName": "전라북도",
+                "태양에너지": 8662.480580408,
+                "풍력": 437916.94291999994
+            },
+            {
+                "areaName": "경기도",
+                "태양에너지": 7743.232343817997,
+                "풍력": 878363.6194350005
+            }
+        ];
+
+        return result;
+    }
+
+    componentDidMount() {
+        // 1. 처음 왔을때 표가 아예 없음
+        // 2. 빈 표라도 있음 (축값 새로 줘야함)
+        var testData = [
+            { "areaName": "전라남도", "태양에너지":9500, "풍력":0 },
+            { "areaName": "경상북도", "태양에너지":0, "풍력":0 },
+            { "areaName": "강원도", "태양에너지":0, "풍력":0 },
+            { "areaName": "제주도", "태양에너지":0, "풍력":0 },
+            { "areaName": "충청도", "태양에너지":0, "풍력":0 },
+            { "areaName": "경상남도", "태양에너지":0, "풍력":0 },
+            { "areaName": "전라북도", "태양에너지":0, "풍력":0 },
+            { "areaName": "경기도", "태양에너지":0, "풍력":0 }
+        ];
+        this.setState({items:testData});
+    }
+    
+    render() {
+        var graph = this.state.items.length>0&&(<PotentialGraph items={this.state.items} isEmpty={this.state.isEmpty}/>);
+        
+        // 데이트인풋 타임인풋 써도 되는걸까...
+        return (
+            <div className='container'>
+                <div className='datetimeContainer'>
+                    기간:
+                    <input id="dateInput" name="startDate" type="date" onChange={this.handleChange} />
+                    <input id="timeInput" name="startTime" type="time" onChange={this.handleChange} />
+                    -
+                    <input id="dateInput" name="endDate" type="date" onChange={this.handleChange} />
+                    <input id="timeInput" name="endTime" type="time" onChange={this.handleChange} />
+                </div>
+                {graph}
+            </div>
+        );
+    }  
 }
 
 export default YearPotential;

@@ -3,7 +3,6 @@ div.mapContainer {
     margin: 0;
     box-sizing: content-box;
     width: 75vw;
-    height: 600px;
     height: 100%;
 }
 div#map {
