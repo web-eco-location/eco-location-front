@@ -37,7 +37,7 @@ div.legendContainer > div.range > div.lbl {
   text-align: center;
 }
 div.checkboxContainer {
-  border: 2px solid yellow;
+  border: 2px solid orange;
   display: flex;
   flex-direction: column;
 }
@@ -56,14 +56,21 @@ div.side {
   border: 1px solid gray;
   padding: 16px;
   box-sizing: border-box;
+  text-align: left;
 }
 div.side > div.title {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 }
+div.year {
+  font-size: 10px;
+  margin-bottom: 10px;
+  text-align: right;
+}
 div.small {
   font-size: 10px;
   margin-bottom: 10px;
   text-align: right;
+  margin-right: 10px;
 }

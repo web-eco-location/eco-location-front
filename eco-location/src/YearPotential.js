@@ -1,63 +1,138 @@
 import React from 'react';
-import './css/TotalPotential.css';
-import KakaoMap from './PotentialMap';
+import './css/YearPotential.css';
+import PotentialGraph from './PotentialGraph';
+import { call } from './service/ApiService';
 
-class YearPotential extends React.Component { // 지역별 잠재량 페이지
-  constructor(props) {  
-    super(props);
-    this.state = {
-      by: "year",
-      items: [],
-      loading: true,
-    };
-  }
-  
-  componentDidMount() {
-    // call("/potential/total", "GET", null).then((response) =>
-    //   this.setState({items:response.data, loading:false}, this.legend)
-    // );
+class YearPotential extends React.Component { // 시간별 잠재량 페이지
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: [],
+            isEmpty: true,
+            loading: true
+        };
+    }
+    
+    drawGraph = () => { // 말이 draw지 사실상 componentDidUpdate 그런데 datetime만 반응하는
+        if(!this.state.startDate||!this.state.startTime||!this.state.endDate||!this.state.endTime) {
+            this.setState({isEmpty: true});
+            return;
+        }
 
-    // 테스트용 데이터
-    var testData = [
-      {	"area": "gangwonDo","data": 494470.7381649313 },
-      { "area": "jejuIsland", "data": 423423.2322175159 },
-      { "area": "gyeonggiDo", "data": 368545.6747648805 },
-      { "area": "jeollabukDo", "data": 409799.93973072513 },
-      { "area": "jeollanamDo", "data": 2000243.1579725298 },
-      { "area": "chungcheongDo", "data": 1087404.0848657144 },
-      { "area": "gyeongsangbukDo", "data": 747818.4639277749 },
-      { "area": "gyeongsangnamDo", "data": 715344.7420174808 }
-      
-    ];
-    // this.setState({items:testData, loading:false}, this.legend);
-  }
-  
-  render() {
-    // var map = this.state.items.length>0 && (
-    //   <KakaoMap by={this.state.by} items={this.state.items}/>
-    // );
+        // 사용자로부터 입력받은 날짜와 시간
+        var start = this.state.startDate + " " + this.state.startTime + ":00";
+        var end = this.state.endDate + " " + this.state.endTime + ":00";
+        
+        // start가 더 늦을경우
+        if(new Date(start)>new Date(end)) {
+            var tmp = start;
+            start = end;
+            end = tmp;
+        }
+        
+        // 실제 데이터 요청
+        call("/energy-potential?from="+start+"&to="+end, "GET", null).then((response) =>
+            this.setState(this.dataCleaning(response))
+        );
+    }
 
-    // var totalPotentialPage = (
-    //   <div className='pageContainer'>
-    //     {map}
-    //     <div className='totalLegend'></div>
-    //   </div>
-    // );
+    handleChange = (event) => {
+        const { name, value } = event.target;
+        this.setState({ [name]: value }, this.drawGraph);
+    }
 
-    // var loadingPage = <h1>...</h1>
-    // var content = loadingPage;
+    dataCleaning = function(items) {
+        // 실전 코드
+        // 변수명이 어째서 korean인가 하면 표 그릴때 keys 이름 바꾸는 법을 모르겠습니다
+        var result = [
+            { "areaName": "전라남도", "태양에너지":0, "풍력":0 },
+            { "areaName": "경상북도", "태양에너지":0, "풍력":0 },
+            { "areaName": "강원도", "태양에너지":0, "풍력":0 },
+            { "areaName": "제주도", "태양에너지":0, "풍력":0 },
+            { "areaName": "충청남도", "태양에너지":0, "풍력":0 },
+            { "areaName": "충청북도", "태양에너지":0, "풍력":0 },
+            { "areaName": "경상남도", "태양에너지":0, "풍력":0 },
+            { "areaName": "전라북도", "태양에너지":0, "풍력":0 },
+            { "areaName": "경기도", "태양에너지":0, "풍력":0 }
 
-    // if(!this.state.loading) {
-    //   console.log("loading end");
-    //   content = totalPotentialPage;
-    // }
+        ];
+        if(!items) {
+            return {items:result, isEmpty:true};
+        }
 
-    return(
-      <div className='container'>
-        {/* {content} */}
-      </div>
-    );
-  }
+        items.forEach((item) => { 
+            if(item.powerType==='1') {
+                var area = result.find((a) => a.areaName===item.areaName);
+                if(area) {
+                    area.태양에너지 += item.forecastEnergyPotential;
+                }
+            } else {
+                var area = result.find((a) => a.areaName===item.areaName);
+                if(area) {
+                    area.풍력 += item.forecastEnergyPotential;
+                }
+            }
+        });
+        return {items:result, isEmpty:false};
+    }
+
+    componentDidMount() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+
+        var emptyData = [
+            { "areaName": "전라남도", "태양에너지":9500, "풍력":0 },
+            { "areaName": "경상북도", "태양에너지":0, "풍력":0 },
+            { "areaName": "강원도", "태양에너지":0, "풍력":0 },
+            { "areaName": "제주도", "태양에너지":0, "풍력":0 },
+            { "areaName": "충청남도", "태양에너지":0, "풍력":0 },
+            { "areaName": "충청북도", "태양에너지":0, "풍력":0 },
+            { "areaName": "경상남도", "태양에너지":0, "풍력":0 },
+            { "areaName": "전라북도", "태양에너지":0, "풍력":0 },
+            { "areaName": "경기도", "태양에너지":0, "풍력":0 }
+        ];
+        this.setState({items:emptyData, today:formattedDate, loading:false});
+    }
+    
+    render() {
+        var graph = this.state.items.length>0&&(<PotentialGraph items={this.state.items} isEmpty={this.state.isEmpty}/>);
+        
+        // 데이트인풋 타임인풋 써도 되는걸까...
+        var yearPotentialPage = (
+            <div className='graphPageContainer'>
+                <div className='datetimeContainer'>
+                    기간:
+                    <div className='inputWrap'>
+                        <input id="dateInput" name="startDate" type="date" min="2020-01-01" max={this.state.today} onChange={this.handleChange} />
+                        <input id="timeInput" name="startTime" type="time" onChange={this.handleChange} />
+                    </div>
+                    ㅡ
+                    <div className='inputWrap'>
+                        <input id="dateInput" name="endDate" type="date" min="2020-01-01" max={this.state.today} onChange={this.handleChange} />
+                        <input id="timeInput" name="endTime" type="time" onChange={this.handleChange} />
+                    </div>
+                </div>
+                {graph}
+            </div>
+        );
+
+        var loadingPage = <h1>...</h1>
+        var content = loadingPage;
+
+        if(!this.state.loading) {
+            console.log("loading end");
+            content = yearPotentialPage;
+        }
+
+        return (
+            <div className='container'>
+                {content}
+            </div>
+        );
+    }  
 }
 
 export default YearPotential;

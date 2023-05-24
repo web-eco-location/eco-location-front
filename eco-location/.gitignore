@@ -24,4 +24,3 @@ yarn-debug.log*
 yarn-error.log*
 
 /src/TestPage.js
-/src/testBoundary.json
