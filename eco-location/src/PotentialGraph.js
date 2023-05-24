@@ -6,7 +6,7 @@ const customColors = {  // 투명색 넣는 용도
     '태양에너지': 'rgba(255, 0, 0, 0)',
     '풍력': 'rgba(0, 0, 255, 0)',
 };
-const EmptyBar = ({ data }) => (
+const EmptyBar = ({ data }) => (    // 데이터 비었을때 띄우는 용도
     <ResponsiveBar
         data={data}
         keys={[ // 표에 나타낼 값
@@ -15,7 +15,7 @@ const EmptyBar = ({ data }) => (
         ]}
         indexBy="areaName"  // 가로축
         groupMode="stacked"
-        margin={{ top: 20, right: 30, bottom: 80, left: 100 }}
+        margin={{ top: 30, right: 50, bottom: 80, left: 100 }}
         padding={0.3}
         valueScale={{ type: 'linear' }}
         colors={({ id }) => customColors[id]}
@@ -27,7 +27,6 @@ const EmptyBar = ({ data }) => (
             tickRotation: 0
         }}
         axisLeft={{ 
-            // tickValues: Array.from(Array(11).keys()).map((index) => index * 500),
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
@@ -80,9 +79,9 @@ const MyResponsiveBar = ({ data }) => (
         ]}
         indexBy="areaName"  // 가로축
         groupMode="stacked"
-        margin={{ top: 20, right: 30, bottom: 80, left: 100 }}
+        margin={{ top: 30, right: 50, bottom: 80, left: 100 }}
         padding={0.3}
-        // valueScale={{ type: 'linear' }}  // 리니어 테스트시 axisLeft tickValues 주석처리
+        // valueScale={{ type: 'linear' }}  // 리니어 테스트시 axisLeft-tickValues 주석처리
         valueScale={{ type: 'symlog' }}
         indexScale={{ type: 'band', round: true }}
         colors={{ scheme: 'pastel1' }}
@@ -121,14 +120,14 @@ const MyResponsiveBar = ({ data }) => (
             <div style={{ padding: 12, color, background: '#222222' }}>
                 <strong>
                     {data.areaName}<br />
-                    태양에너지: {data.태양에너지}W<br />
-                    풍력: {data.풍력}W
+                    태양에너지: {data.태양에너지?data.태양에너지:"0"}W<br />
+                    풍력: {data.풍력?data.풍력:"0"}W
                 </strong>
             </div>
         }
         label={d => `${Math.floor((d.value)*100)/100}`}
-        labelSkipWidth={1}
-        labelSkipHeight={1}
+        labelSkipWidth={10}
+        labelSkipHeight={10}
         labelTextColor={{
             from: 'color',
             modifiers: [
@@ -172,8 +171,10 @@ class PotentialGraph extends React.Component {
     render() {
         let bar;
         if(this.props.isEmpty) {
-            bar = <EmptyBar data={this.props.items} />
-            // bar = <MyResponsiveBar data={this.props.items} />
+            bar = <div className="empty">
+                    <EmptyBar data={this.props.items} />
+                    <h2 className="emptyInfo">조회된 데이터가 없습니다.</h2>
+                </div>
         } else {
             bar = <MyResponsiveBar data={this.props.items} />
         }
@@ -186,6 +187,3 @@ class PotentialGraph extends React.Component {
     }
 }
 export default PotentialGraph;
-
-// 문제점) 보조축 기능이 없는데 구현도 곤란하여 축 구간을 겹쳐 보기 힘듦
-// > 지금 해둔것처럼 수동으로 조절하거나 다른 라이브러리 사용을 고려

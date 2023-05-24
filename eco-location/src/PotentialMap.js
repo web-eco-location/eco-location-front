@@ -2,31 +2,19 @@ import React from "react";
 import './css/PotentialMap.css';
 import boundaryData from "./boundary_potential.json";
 
-function polygon(map, boundary, bgData, data, event) { // 1회당 도/광역시 하나 // 파라미터가 이게 맞나...
+function polygon(map, boundary, bgData, data, event) { // 1회당 도/광역시 하나
     // 배경색 변경
     var backgroundColor = bgData.bg0+ Math.floor(15-(data-bgData.min)/bgData.d).toString(16) +bgData.bg1;
 
     // 이벤트
-    // var customOverlay = new window.kakao.maps.CustomOverlay({});
-    // 마우스오버 - 배경색 변경 + 지역명 커스텀오버레이 표시
+    // 마우스오버 - 배경색 변경
     var mouseOverHandler = function(mouseEvent) {
         polygons.forEach((polygon) => { polygon.setOptions({fillColor: '#FF0'}) });
-
-        // customOverlay.setContent('<div class="area">' + boundary.properties.CTP_KOR_NM + '</div>');
-        // customOverlay.setPosition(mouseEvent.latLng);
-        // customOverlay.setMap(map);
     };
 
-    // 마우스이동 - 커스텀오버레이 위치 변경
-    // var mouseMoveHandler = function(mouseEvent) {
-    //     customOverlay.setPosition(mouseEvent.latLng); 
-    // };
-
-    // 마우스아웃 - 배경색 원래대로 + 커스텀오버레이 제거 
+    // 마우스아웃 - 배경색 원래대로
     var mouseOutHandler = function() {
         polygons.forEach((polygon) => { polygon.setOptions({fillColor: backgroundColor}) });
-        
-        // customOverlay.setMap(null);
     };
 
     // 클릭 - 사이드에 정보 띄우기
@@ -51,15 +39,6 @@ function polygon(map, boundary, bgData, data, event) { // 1회당 도/광역시 
     content.addEventListener("mouseover", () => polygons.forEach((polygon) => { polygon.setOptions({fillColor: '#FF0'}); }));
     content.addEventListener("mouseout", () => polygons.forEach((polygon) => { polygon.setOptions({fillColor: backgroundColor}) }));
     content.addEventListener("click", clickHandler);
-    // content.addEventListener("click", (e) => { // 마우스클릭 - 인포윈도우 켜기
-    //     console.log(e);
-    //     var infowindow = new window.kakao.maps.InfoWindow({removable: true});
-    //     var content = '<div class="info"><div class="title">'+boundary.properties.CTP_KOR_NM+'</div>'+data+'</div>';
-    //     infowindow.setContent(content);
-    //     infowindow.setPosition(label.n); 
-    //     infowindow.setMap(map);
-    // });
-
 
     // 폴리곤 생성 (구역당 여러개일 수 있음)
     var polygons = [];
@@ -149,7 +128,7 @@ class KakaoMap extends React.Component {
 
         // 지도 그리기
         script.onload = () => { 
-            window.kakao.maps.load(() => { // 맵 함수 파라미터 에바라서 클래스 안으로 끌고들어옴
+            window.kakao.maps.load(() => {
                 this.map()
             })
         };
