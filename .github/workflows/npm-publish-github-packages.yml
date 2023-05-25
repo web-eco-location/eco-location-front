@@ -50,9 +50,11 @@ jobs:
     - name: Install Dependencies
       if: steps.cache.outputs.cache-hit != 'true'
       run: npm install
+      working-directory: ${{ env.working-directory }}
 
     - name: Build
       run: npm run build
+      working-directory: ${{ env.working-directory }}
     # 도커 이미지에 env 파일 포함
     - name: Create .env file
       run: |
