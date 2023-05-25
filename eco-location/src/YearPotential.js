@@ -30,9 +30,18 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
             end = tmp;
         }
         
+        // 로딩 표시
+        var emptyInfo = document.querySelector(".emptyInfo");
+        emptyInfo.innerHTML = "로딩중...";
+        emptyInfo.style.display="block";
+
         // 실제 데이터 요청
         call("/energy-potential?from="+start+"&to="+end, "GET", null).then((response) =>
-            this.setState(this.dataCleaning(response))
+            this.setState(this.dataCleaning(response), () => {
+                emptyInfo.innerHTML = "조회된 데이터가 없습니다.";
+                if(!this.state.isEmpty) emptyInfo.style.display="none";
+                console.log(this.state);
+            })
         );
     }
 
@@ -45,15 +54,15 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
         // 실전 코드
         // 변수명이 어째서 korean인가 하면 표 그릴때 keys 이름 바꾸는 법을 모르겠습니다
         var result = [
-            { "areaName": "전라남도", "태양에너지":0, "풍력":0 },
-            { "areaName": "경상북도", "태양에너지":0, "풍력":0 },
-            { "areaName": "강원도", "태양에너지":0, "풍력":0 },
-            { "areaName": "제주도", "태양에너지":0, "풍력":0 },
-            { "areaName": "충청남도", "태양에너지":0, "풍력":0 },
-            { "areaName": "충청북도", "태양에너지":0, "풍력":0 },
-            { "areaName": "경상남도", "태양에너지":0, "풍력":0 },
-            { "areaName": "전라북도", "태양에너지":0, "풍력":0 },
-            { "areaName": "경기도", "태양에너지":0, "풍력":0 }
+            { "areaName": "전라남도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "경상북도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "강원도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "제주도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "충청남도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "충청북도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "경상남도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "전라북도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "경기도", "태양에너지":0, "풍력에너지":0 }
 
         ];
         if(!items) {
@@ -69,7 +78,7 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
             } else {
                 var area = result.find((a) => a.areaName===item.areaName);
                 if(area) {
-                    area.풍력 += item.forecastEnergyPotential;
+                    area.풍력에너지 += item.forecastEnergyPotential;
                 }
             }
         });
@@ -84,15 +93,15 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
         const formattedDate = `${year}-${month}-${day}`;
 
         var emptyData = [
-            { "areaName": "전라남도", "태양에너지":9500, "풍력":0 },
-            { "areaName": "경상북도", "태양에너지":0, "풍력":0 },
-            { "areaName": "강원도", "태양에너지":0, "풍력":0 },
-            { "areaName": "제주도", "태양에너지":0, "풍력":0 },
-            { "areaName": "충청남도", "태양에너지":0, "풍력":0 },
-            { "areaName": "충청북도", "태양에너지":0, "풍력":0 },
-            { "areaName": "경상남도", "태양에너지":0, "풍력":0 },
-            { "areaName": "전라북도", "태양에너지":0, "풍력":0 },
-            { "areaName": "경기도", "태양에너지":0, "풍력":0 }
+            { "areaName": "전라남도", "태양에너지":9500, "풍력에너지":0 },
+            { "areaName": "경상북도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "강원도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "제주도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "충청남도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "충청북도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "경상남도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "전라북도", "태양에너지":0, "풍력에너지":0 },
+            { "areaName": "경기도", "태양에너지":0, "풍력에너지":0 }
         ];
         this.setState({items:emptyData, today:formattedDate, loading:false});
     }
@@ -100,7 +109,6 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
     render() {
         var graph = this.state.items.length>0&&(<PotentialGraph items={this.state.items} isEmpty={this.state.isEmpty}/>);
         
-        // 데이트인풋 타임인풋 써도 되는걸까...
         var yearPotentialPage = (
             <div className='graphPageContainer'>
                 <div className='datetimeContainer'>
@@ -116,6 +124,7 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
                     </div>
                 </div>
                 {graph}
+                <h2 className="emptyInfo">조회된 데이터가 없습니다.</h2>
             </div>
         );
 

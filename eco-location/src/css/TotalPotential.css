@@ -38,6 +38,8 @@ div.legendContainer > div.range > div.lbl {
 }
 div.checkboxContainer {
   border: 2px solid orange;
+  border-top: 0;
+  padding: 4px;
   display: flex;
   flex-direction: column;
 }
@@ -45,12 +47,11 @@ div.checkboxContainer > label {
   margin: 4px;
 }
 label > input[type='checkbox'] {
-  accent-color: #232323;
+  accent-color: #444444;
 }
 /* 지도 우측 사이드 */
 div.side {
   width: 25vw;
-  /* height: calc(100% - 20px); */
   height: 100%;
   background-color: white;
   border: 1px solid gray;
@@ -63,11 +64,15 @@ div.side > div.title {
   font-weight: bold;
   margin-bottom: 10px;
 }
-div.year {
-  font-size: 10px;
-  margin-bottom: 10px;
-  text-align: right;
+div.side > div.info {
+  font-size: 14px;
 }
+div.side > div.pieContainer {
+  width: 340px;
+  height: 300px;
+  overflow: hidden;
+}
+
 div.small {
   font-size: 10px;
   margin-bottom: 10px;

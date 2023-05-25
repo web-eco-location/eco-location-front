@@ -11,7 +11,7 @@ const EmptyBar = ({ data }) => (    // 데이터 비었을때 띄우는 용도
         data={data}
         keys={[ // 표에 나타낼 값
             '태양에너지',
-            '풍력'
+            '풍력에너지'
         ]}
         indexBy="areaName"  // 가로축
         groupMode="stacked"
@@ -75,14 +75,14 @@ const MyResponsiveBar = ({ data }) => (
         data={data}
         keys={[ // 표에 나타낼 값
             '태양에너지',
-            '풍력'
+            '풍력에너지'
         ]}
         indexBy="areaName"  // 가로축
         groupMode="stacked"
-        margin={{ top: 30, right: 50, bottom: 80, left: 100 }}
+        margin={{ top: 30, right: 50, bottom: 80, left: 130 }}
         padding={0.3}
-        // valueScale={{ type: 'linear' }}  // 리니어 테스트시 axisLeft-tickValues 주석처리
-        valueScale={{ type: 'symlog' }}
+        valueScale={{ type: 'linear' }}  // 리니어 테스트시 axisLeft-tickValues 주석처리
+        // valueScale={{ type: 'symlog' }}
         indexScale={{ type: 'band', round: true }}
         colors={{ scheme: 'pastel1' }}
         borderColor={{
@@ -102,26 +102,26 @@ const MyResponsiveBar = ({ data }) => (
             tickRotation: 0
         }}
         axisLeft={{ // 좌측 축
-            tickValues: Array.from(Array(7).keys()).map((index) => {
-                if(index<2) {
-                    return index*3000+4000;
-                } else {
-                    return Math.pow(10, index+1);
-                }
-            }),
+            // tickValues: Array.from(Array(7).keys()).map((index) => {
+            //     if(index<2) {
+            //         return index*3000+4000;
+            //     } else {
+            //         return Math.pow(10, index+1);
+            //     }
+            // }),
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
             legend: '잠재량 총합(W)',
             legendPosition: 'middle',
-            legendOffset: -70
+            legendOffset: -100
         }}
         tooltip={({ color, data }) => // 마우스 올리면 뜨는 창
             <div style={{ padding: 12, color, background: '#222222' }}>
                 <strong>
                     {data.areaName}<br />
                     태양에너지: {data.태양에너지?data.태양에너지:"0"}W<br />
-                    풍력: {data.풍력?data.풍력:"0"}W
+                    풍력에너지: {data.풍력에너지?data.풍력에너지:"0"}W
                 </strong>
             </div>
         }
@@ -169,13 +169,13 @@ const MyResponsiveBar = ({ data }) => (
 
 class PotentialGraph extends React.Component {
     render() {
+        console.log(this.props);
         let bar;
         if(this.props.isEmpty) {
-            bar = <div className="empty">
-                    <EmptyBar data={this.props.items} />
-                    <h2 className="emptyInfo">조회된 데이터가 없습니다.</h2>
-                </div>
+            console.log("empty");
+            bar = <EmptyBar data={this.props.items} />
         } else {
+            console.log("not empty");
             bar = <MyResponsiveBar data={this.props.items} />
         }
 

@@ -2,6 +2,55 @@ import React from 'react';
 import './css/TotalPotential.css';
 import Map from './PotentialMap';
 import {call} from './service/ApiService';
+import { ResponsivePie } from '@nivo/pie'
+
+class MyResponsivePie extends React.Component { // 전체 데이터 파이 그래프...
+    render() {
+        var valueKey;
+        if(this.props.by==='total') valueKey = 'potentialAmount';
+        else if(this.props.by==="source1") valueKey = "solarEnergyPotential";
+        else valueKey = "windEnergyPotential";
+    
+        return ( 
+            <ResponsivePie
+                data={this.props.data}
+                id="areaName"
+                value={valueKey}
+                margin={{ top: 40, right: 90, bottom: 80, left: 90 }}
+                innerRadius={0.5}
+                padAngle={0.7}
+                cornerRadius={0}
+                sortByValue={true}
+                activeOuterRadiusOffset={8}
+                borderWidth={1}
+                borderColor={{
+                    from: 'color',
+                    modifiers: [
+                        [
+                            'darker',
+                            0.2
+                        ]
+                    ]
+                }}
+                arcLabel={(d) => `${Math.floor((d.value)*100)/100}`}
+                arcLinkLabelsSkipAngle={10}
+                arcLinkLabelsTextColor="#333333"
+                arcLinkLabelsThickness={2}
+                arcLinkLabelsColor={{ from: 'color' }}
+                arcLabelsSkipAngle={10}
+                arcLabelsTextColor={{
+                    from: 'color',
+                    modifiers: [
+                        [
+                            'darker',
+                            2
+                        ]
+                    ]
+                }}
+            />
+        );
+    }
+}
 
 class TotalPotential extends React.Component { // 지역별 잠재량 페이지
     constructor(props) {  
@@ -21,8 +70,8 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
             maxValue = items.reduce((max, p) => p.potentialAmount > max ? p.potentialAmount : max, items[0].potentialAmount); 
             minValue = items.reduce((min, p) => p.potentialAmount < min ? p.potentialAmount : min, items[0].potentialAmount); 
             d = (maxValue-minValue+1)/10;
-            bg0 = "#00";
-            bg1 = "F00";
+            bg0 = "#22";
+            bg1 = "F22";
         } else if(this.state.by=="source1") {
             maxValue = items.reduce((max, p) => p.solarEnergyPotential > max ? p.solarEnergyPotential : max, items[0].solarEnergyPotential); 
             minValue = items.reduce((min, p) => p.solarEnergyPotential < min ? p.solarEnergyPotential : min, items[0].solarEnergyPotential); 
@@ -33,7 +82,7 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
             maxValue = items.reduce((max, p) => p.windEnergyPotential > max ? p.windEnergyPotential : max, items[0].windEnergyPotential); 
             minValue = items.reduce((min, p) => p.windEnergyPotential < min ? p.windEnergyPotential : min, items[0].windEnergyPotential); 
             d = (maxValue-minValue+1)/10;
-            bg0 = "#0000";
+            bg0 = "#2222";
             bg1 = "F";
         }
 
@@ -60,21 +109,19 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
         
         var unit = document.createElement("div");
         unit.className = "small";
-        unit.innerHTML = "단위: W"
+        unit.innerHTML = "* 단위: W/m²"
         legendContainer.appendChild(unit);
-
-        this.sideInfo();
     };
     
     checkHandler = (e) => {
         // 일단 둘다 풀면 둘다 체크되도록 했음... 다 풀리면 지도만 띄우는게 맞나? 
         var checkboxs = document.getElementsByClassName("checkbox");
         if(checkboxs[0].checked && checkboxs[1].checked) {  // 둘다 체크
-            this.setState({by:"total"}, () => {this.calcBackgroundColor(this.state.totalData)});
+            this.setState({by:"total"}, () => {this.calcBackgroundColor(this.state.totalData); this.sideInfo();});
         } else if(checkboxs[0].checked && !checkboxs[1].checked) {
-            this.setState({by:"source1"}, () => {this.calcBackgroundColor(this.state.sourceData)});
+            this.setState({by:"source1"}, () => {this.calcBackgroundColor(this.state.sourceData); this.sideInfo();});
         } else if(!checkboxs[0].checked && checkboxs[1].checked) {
-            this.setState({by:"source2"}, () => {this.calcBackgroundColor(this.state.sourceData)});
+            this.setState({by:"source2"}, () => {this.calcBackgroundColor(this.state.sourceData); this.sideInfo();});
         } else if(!checkboxs[0].checked && !checkboxs[1].checked) { // 둘다 미체크
             checkboxs[0].checked = true;
             checkboxs[1].checked = true;
@@ -82,31 +129,25 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
         }
     }
 
-    sideInfo = (areaName) => {
-        // 클릭당한 지역의 정보를 사이드 영역에 띄움
-        // 내용 고민중 - 1.현재 지도따라 2.전체랑 발전원별 전부
-        var side = document.querySelector(".side");
-        if(!areaName) {
-            side.innerHTML = "";
-            return;
-        }
+    sideInfo = () => {
+        // 수정) 지도따라 전체데이터 + 설명 띄우기
+        var title = document.querySelector(".title");
+        var info = document.querySelector(".info");
 
         const year = new Date().getFullYear() -1;
         if(this.state.by==="total") {
-            var data = this.state.totalData.find((d) => d.areaName===areaName);
-            side.innerHTML = "<div class='title'>"+data.areaName+" 잠재량 총합</div>"+
-                            "<div class='info'>"+data.potentialAmount+"W</div>"+
-                            "<div class='small'>*"+year+"년 자료</div>";
+            title.innerHTML = "잠재량 총합";
+            info.innerHTML = "일사량이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공<br/>"+
+                            "풍속이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
+                            "<div class='small'>* "+year+"년 자료</div>";
         } else if(this.state.by==="source1") {
-            var data = this.state.sourceData.find((d) => d.areaName===areaName);
-            side.innerHTML = "<div class='title'>"+data.areaName+" 태양에너지 잠재량 총합</div>"+
-                            "<div class='info'>"+data.solarEnergyPotential+"W</div>"+
-                            "<div class='year'>*"+year+"년 자료</div>";
+            title.innerHTML = "태양에너지 잠재량 총합";
+            info.innerHTML = "일사량이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
+                            "<div class='small'>* "+year+"년 자료</div>";
         } else if(this.state.by==="source2") {
-            var data = this.state.sourceData.find((d) => d.areaName===areaName);
-            side.innerHTML = "<div class='title'>"+data.areaName+" 풍력에너지 잠재량 총합</div>"+
-                            "<div class='info'>"+data.windEnergyPotential+"W</div>"+
-                            "<div class='year'>*"+year+"년 자료</div>";
+            title.innerHTML = "풍력에너지 잠재량 총합";
+            info.innerHTML = "풍속이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
+                            "<div class='small'>* "+year+"년 자료</div>";
         }
         
     }
@@ -115,7 +156,10 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
         // 실제 사용
         const year = new Date().getFullYear() -1;
         call("/energy-potential/source?year="+year, "GET", null).then((response) =>
-            this.setState({by:"total", totalData:response, loading:false}, this.calcBackgroundColor(response))
+            this.setState({by:"total", totalData:response, loading:false}, () => {
+                this.calcBackgroundColor(response); 
+                this.sideInfo();
+            })
         );
             
         call("/energy-potential/source-type?year="+year, "GET", null).then((response) =>
@@ -124,13 +168,16 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
     }
     
     render() {
-        var map;
+        var map, pie;
         if(this.state.totalData&&this.state.by=="total") {
-            map = this.state.totalData.length>0&&(<Map by={this.state.by} items={this.state.totalData} bgData={this.state.bgData} sideInfo={this.sideInfo} />);
+            map = this.state.totalData.length>0&&(<Map by={this.state.by} items={this.state.totalData} bgData={this.state.bgData} />);
+            pie = this.state.totalData.length>0&&(<MyResponsivePie by={this.state.by} data={this.state.totalData} />);
         } else if (this.state.sourceData) {
-            map = this.state.sourceData.length>0&&(<Map by={this.state.by} items={this.state.sourceData} bgData={this.state.bgData} sideInfo={this.sideInfo} />);
+            map = this.state.sourceData.length>0&&(<Map by={this.state.by} items={this.state.sourceData} bgData={this.state.bgData} />);
+            pie = this.state.totalData.length>0&&(<MyResponsivePie by={this.state.by} data={this.state.sourceData} />);
         } else {
             map = <div className='mapContainer'></div>
+            pie = <div className='pieContainer'></div>
         }
 
         var totalPotentialPage = (
@@ -143,11 +190,17 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
                         <input className='checkbox' type="checkbox" onChange={this.checkHandler} defaultChecked="true" />태양에너지
                     </label>
                     <label style={{color:"blue"}}>
-                        <input className='checkbox' type="checkbox" onChange={this.checkHandler} defaultChecked="true" />풍력
+                        <input className='checkbox' type="checkbox" onChange={this.checkHandler} defaultChecked="true" />풍력에너지
                     </label>
                 </div>
             </div>
-            <div className='side'></div>
+            <div className='side'>
+                <div className='title'></div>
+                <div className="pieContainer">
+                    {pie}
+                </div>
+                <div className='info'></div>
+            </div>
         </div>
         );
 

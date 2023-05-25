@@ -8,20 +8,13 @@ div.mapContainer {
 div#map {
     width: 100%;
     height: 100%;
-    /* border: 1px solid black; */
 }
 
 /* 호버 - 커스텀 오버레이 */
-div.area {
-    position: absolute;
-    background: #fff;
-    border: 1px solid #888;
+/* div.area {
     border-radius: 3px;
     font-size: 12px;
-    top: -5px;
-    left: 15px;
-    padding:2px;
-}
+} */
 
 /* 클릭 - 인포윈도우 */
 /* div.info {
@@ -37,4 +30,23 @@ div.label {
     text-shadow: -1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black;
     font-size: 18px;
     font-weight: bold;
+}
+/* 구역이름 라벨 위에 띄울 div */
+div.customInfo {
+    min-width: 200px;
+    min-height: 60px;
+    text-align: center;
+    justify-content: center;
+    background-color: white;
+    pointer-events: none;
+    z-index: 5;
+    position: absolute;
+    background: #fff;
+    border: 2px solid #888;
+    padding: 16px;
+}
+div.customInfo > div.title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }

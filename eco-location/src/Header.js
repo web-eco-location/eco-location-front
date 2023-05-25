@@ -36,7 +36,7 @@ class Header extends React.Component {
                     <div className="item">
                         <Link to="/">재생에너지 전환율</Link>
                         <div className="dropdown">
-                            <Link to="/">국내 재생에너지 생산비율</Link>
+                            <Link to="/renewable_percent">국내 재생에너지 생산비율</Link>
                         </div>
                     </div>
                 </div>
