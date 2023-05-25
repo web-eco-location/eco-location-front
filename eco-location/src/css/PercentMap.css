@@ -10,20 +10,6 @@ div#map {
     height: 100%;
 }
 
-/* 호버 - 커스텀 오버레이 */
-/* div.area {
-    border-radius: 3px;
-    font-size: 12px;
-} */
-
-/* 클릭 - 인포윈도우 */
-/* div.info {
-    justify-content: center;
-}
-div.info > div.title {
-    font-size: 14px;
-} */
-
 /* 구역이름 표시 - 커스텀 오버레이 */
 div.label {
     color: lightyellow;
