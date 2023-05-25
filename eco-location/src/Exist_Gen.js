@@ -64,7 +64,8 @@ class Exist_Gen extends React.Component {
       광주광역시: [],
       대구광역시: [],
       경상북도: [],
-      경상남도: []
+      경상남도: [],
+      부산광역시: []
     };
     
     this.state.items.forEach((item) => {
