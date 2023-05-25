@@ -11,6 +11,8 @@ import YearPotential from "./YearPotential";
 // import Gen_detail from './Gen_detail';
 // import Gen_year from './Gen_year';
 import API_Test_Page from './API_Test_Page';
+import Renewable_percent from "./RenewablePercent";
+import Exist_Gen from './Exist_Gen';
 
 class AppRouter extends React.Component {
     render() {
@@ -31,8 +33,10 @@ class AppRouter extends React.Component {
                         <Route path="/potential_year" element={<YearPotential/>}></Route>
                         
                         {/* 기존 발전소 */}
-                        
+                        <Route path="/exist_gen" element={<Exist_Gen/>}></Route>
+
                         {/* 재생에너지 전환율 */}
+                        <Route path="/renewable_percent" element={<Renewable_percent/>}></Route>
 
                         {/* API 테스트용 페이지 */}
                         <Route path="/test_page" element={<API_Test_Page/>}></Route>

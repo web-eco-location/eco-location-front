@@ -1,23 +1,18 @@
 import React from "react";
-import './css/PotentialMap.css';
-import boundaryData from "./boundary_potential.json";
+import './css/PercentMap.css';
+import boundaryData from "./boundary_percent.json";
 
 function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
-    if(!bgData) return;
+    if(!bgData||!boundary) return;
 
     // 배경색 변경
-    var backgroundColor = bgData.bg0+ Math.floor(15-(data-bgData.min)/bgData.d).toString(16) +bgData.bg1;
+    var tmp = Math.floor(15-(data-bgData.min)/bgData.d).toString(16);
+    var backgroundColor = "#22"+tmp+"F"+tmp+"F";
 
     // 이벤트
     var customOverlay = new window.kakao.maps.CustomOverlay({});
-    var innerContent;
-    if(bgData.bg0.length===3) {
-        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 잠재량 총합</div><div class='info'>"+data+"W/m²</div>";
-    } else if(bgData.bg0.length===1) {
-        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 태양에너지 잠재량 총합</div><div class='info'>"+data+"W/m²</div>";
-    } else { 
-        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 풍력에너지 잠재량 총합</div><div class='info'>"+data+"W/m²</div>";
-    }
+    var innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 재생에너지 생산 비율</div>"+
+                        "<div class='info'>"+data+"%</div>";
 
     // 마우스오버 - 배경색 변경 + 커스텀오버레이 표시
     var mouseOverHandler = function(mouseEvent) {
@@ -63,12 +58,7 @@ function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
     content.addEventListener('mouseover', () => {
         polygons.forEach((polygon) => { polygon.setOptions({fillColor: '#FF0'}) });
         
-        if(bgData.bg0.length===3)
-            customInfo.innerHTML = innerContent;
-        else if(bgData.bg0.length===1)
-            customInfo.innerHTML = innerContent;
-        else 
-            customInfo.innerHTML = innerContent;
+        customInfo.innerHTML = innerContent;
         customInfo.style.display = 'block';
     });
     content.addEventListener('mouseleave', () => {
@@ -142,12 +132,19 @@ class KakaoMap extends React.Component {
     
         // 다각형 그리기
         this.props.items.forEach((item) => {
-            if(this.props.by=="total") {
-                polygon(map, boundaryData.features.find((b) => b.properties.CTP_KOR_NM===item.areaName), this.props.bgData, item.potentialAmount);
-            } else if(this.props.by=="source1") {
-                polygon(map, boundaryData.features.find((b) => b.properties.CTP_KOR_NM===item.areaName), this.props.bgData, item.solarEnergyPotential);
-            } else if(this.props.by=="source2") {
-                polygon(map, boundaryData.features.find((b) => b.properties.CTP_KOR_NM===item.areaName), this.props.bgData, item.windEnergyPotential);
+            if(item.areaName==="소계") {
+                // 폴리곤 대신 지도 구석에 창 띄울 예정
+            } else {
+                polygon(map, boundaryData.features.find((b) => {
+                    if(b.properties.CTP_KOR_NM.length>4) { 
+                        if(b.properties.CTP_KOR_NM.substr(0,2)===item.areaName) 
+                            return true;
+                    } else {
+                        if(b.properties.CTP_KOR_NM.substr(0,1) + b.properties.CTP_KOR_NM.substr(b.properties.CTP_KOR_NM.length-2,1)===item.areaName) 
+                            return true;
+                    }
+                }), this.props.bgData, item.renewableEnergyPercent);
+                // polygon(map, boundaryData.features.find((b) => b.properties.CTP_KOR_NM===item.areaName), this.props.bgData, item.potentialAmount);
             }
         });
     }
@@ -177,6 +174,7 @@ class KakaoMap extends React.Component {
     }
 
     render() {
+        console.log(this.props);
         return(
         <div className="mapContainer">
             <div id="map"></div>

@@ -1,0 +1,66 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: NHN CD
+
+on:
+  push:
+    branches: [ "deploy" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./eco-location
+    steps:
+    - uses: actions/checkout@v3
+    # React 프로젝트이므로 해당 환경을 Node.js 위에서 실행하겠다고 명시한다.
+    # 마찬가지로 누군가 만들어 놓은 Action이다.
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.5.2
+      with:
+        node-version: lts/Hydrogen
+        
+    - name: Install Dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm install
+      working-directory: ${{ env.working-directory }}
+
+    - name: Build
+      run: CI=false npm run build
+      working-directory: ${{ env.working-directory }}
+    # 도커 이미지에 env 파일 포함
+    - name: Create .env file
+      run: |
+        touch .env
+        echo REACT_APP_KAKAO_REST_API_KEY=${{ secrets.REACT_APP_KAKAO_REST_API_KEY }}\ >> .env
+      working-directory: ${{ env.working-directory }}
+
+    - name : Build Docker Image
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/eco-location-front .
+      working-directory: ${{ env.working-directory }}
+    - name: DockerHub Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: DockerHub Push
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/eco-location-front
+      working-directory: ${{ env.working-directory }}
+
+# 배포 시작
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: centos
+        key: ${{ secrets.KEY }}
+        script: |
+          sudo docker stop eco-location-front
+          sudo docker rm eco-location-front
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eco-location-front
+          docker run -d --name eco-location-front --network ${{ secrets.NETWORK }} -p ${{ secrets.USER_PORT }}:${{ secrets.USER_PORT }} ${{ secrets.DOCKERHUB_USERNAME }}/eco-location-front
+          docker image prune -f
