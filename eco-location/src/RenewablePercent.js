@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/TotalPotential.css';
+import './css/RenewablePercent.css';
 import Map from './PercentMap';
 import {call} from './service/ApiService';
 
@@ -15,10 +15,10 @@ class Renewable_percent extends React.Component { // 지역별 잠재량 페이�
 
     calcBackgroundColor = (items) => {
         var maxValue, minValue, d;
-        maxValue = items.reduce((max, p) => p.potentialAmount > max ? p.potentialAmount : max, items[0].potentialAmount); 
-        minValue = items.reduce((min, p) => p.potentialAmount < min ? p.potentialAmount : min, items[0].potentialAmount); 
-        d = (maxValue-minValue+1)/10;
-
+        maxValue = items.reduce((max, p) => p.renewableEnergyPercent > max ? p.renewableEnergyPercent : max, items[0].renewableEnergyPercent); 
+        minValue = items.reduce((min, p) => p.renewableEnergyPercent < min ? p.renewableEnergyPercent : min, items[0].renewableEnergyPercent); 
+        d = (maxValue-minValue)/10;
+        console.log(maxValue, minValue, d);
         var newbgData = {"min": minValue, "d": d};
         if(JSON.stringify(this.state.bgData)!=JSON.stringify(newbgData)) {
             this.setState({bgData: newbgData}, () => {this.drawLegend()});
@@ -35,8 +35,8 @@ class Renewable_percent extends React.Component { // 지역별 잠재량 페이�
             range.className = "range";
             range.innerHTML = "<div class='color' style='background-color:"+backgroundColor+"'></div>"+
                                 "<div class='lbl'>"+ 
-                                Math.round((this.state.bgData.min+i*this.state.bgData.d)*100)/100+" - "+ 
-                                Math.round((this.state.bgData.min+(i+1)*this.state.bgData.d-1)*100)/100 +
+                                Math.floor((this.state.bgData.min+i*this.state.bgData.d)*1000)/1000+" ~ "+ 
+                                Math.ceil((this.state.bgData.min+(i+1)*this.state.bgData.d)*1000)/1000 +
                                 "</div>";
             legendContainer.appendChild(range);
         }
@@ -59,10 +59,12 @@ class Renewable_percent extends React.Component { // 지역별 잠재량 페이�
     }
     
     componentDidMount() {
-        // 실제 사용
+        // 실제 사용? 작년 날짜만 가능
         const year = new Date().getFullYear() -1;
         call("/areageneratorsource?start="+year+"-01-01&end="+year+"-12-31", "GET", null).then((response) =>
             this.setState({items:response, loading:false}, () => {
+                console.log(response);
+                console.log(this.state);
                 this.calcBackgroundColor(response); 
                 this.sideInfo();
             })
@@ -71,8 +73,8 @@ class Renewable_percent extends React.Component { // 지역별 잠재량 페이�
     
     render() {
         var map;
-        if(this.state.totalData&&this.state.by=="total") {
-            map = this.state.totalData.length>0&&(<Map by={this.state.by} items={this.state.items} bgData={this.state.bgData} />);
+        if(this.state.items) {
+            map = this.state.items.length>0&&(<Map items={this.state.items} bgData={this.state.bgData} />);
         } else {
             map = <div className='mapContainer'></div>
         }

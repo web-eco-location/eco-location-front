@@ -116,12 +116,18 @@ const MyResponsiveBar = ({ data }) => (
             legendPosition: 'middle',
             legendOffset: -100
         }}
-        tooltip={({ color, data }) => // 마우스 올리면 뜨는 창
-            <div style={{ padding: 12, color, background: '#222222' }}>
+        tooltip={({ data }) => // 마우스 올리면 뜨는 창
+            <div style={{ padding: 12, background: '#222222' }}>
                 <strong>
-                    {data.areaName}<br />
-                    태양에너지: {data.태양에너지?data.태양에너지:"0"}W<br />
-                    풍력에너지: {data.풍력에너지?data.풍력에너지:"0"}W
+                    <div style={{ color:"white" }}>
+                        {data.areaName}
+                    </div>
+                    <div style={{ color:"#fbb4ae" }}>
+                        태양에너지: {data.태양에너지?data.태양에너지:"0"}W
+                    </div>
+                    <div style={{ color:"#b3cde3" }}>
+                        풍력에너지: {data.풍력에너지?data.풍력에너지:"0"}W
+                    </div>
                 </strong>
             </div>
         }
