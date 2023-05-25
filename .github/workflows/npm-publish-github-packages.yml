@@ -6,8 +6,6 @@ name: NHN CD
 on:
   push:
     branches: [ "deploy" ]
-  pull_request:
-    branches: [ "deploy" ]
 
 permissions:
   contents: read
