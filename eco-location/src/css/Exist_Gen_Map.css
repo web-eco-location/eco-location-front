@@ -1,34 +1,105 @@
-div.mapContainer {
-    padding: 0;
-    margin: 0;
-    box-sizing: content-box;
-    width: 1000px; 
-    height: 100%;
+.pageContainer {
+    display: flex;
+  }
+
+.mapContainer {
+flex: 3;
 }
-div#map {
-    height: 500px;
-    border: 1px solid black;
-    margin: 50px 30px;
+
+.side {
+flex: 1;
+display: flex;
+flex-direction: column;
+overflow-y: hidden;
 }
-div.area {
-    position: absolute;
-    background: #fff;
-    border: 1px solid #888;
-    border-radius: 3px;
-    font-size: 12px;
-    top: -5px;
-    left: 15px;
-    padding:2px;
+
+.generatorinfo {
+border: 1px solid #ccc;
+border-radius: 4px;
+padding: 10px;
+
 }
-div.info {
-    /* text-align: center; */
-    justify-content: center;
-}
-div.info > div.title {
-    font-size: 14px;
-}
-div.label {
-    color: lightyellow;
-    text-shadow: -1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black;
+
+.tableContainer {
+    max-height: 70vh; /* 표의 최대 높이를 지정합니다. 필요에 따라 조절할 수 있습니다. */
+    overflow-y: auto; /* 세로 스크롤을 표시하고 내용이 넘칠 경우 스크롤 가능하도록 합니다. */
+  }
+
+table {
+    border: 1px #a39485 solid;
+    font-size: .9em;
+    box-shadow: 0 2px 5px rgba(0,0,0,.25);
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  
+  th {
+    text-align: left;
+  }
+    
+  thead {
     font-weight: bold;
-}
+    color: #fff;
+    background: #73685d;
+  }
+    
+   td, th {
+    padding: 1em .5em;
+    vertical-align: middle;
+  }
+    
+   td {
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    background: #fff;
+  }
+  
+  a {
+    color: #73685d;
+  }
+    
+   @media all and (max-width: 768px) {
+      
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    
+    th {
+      text-align: right;
+    }
+    
+    table {
+      position: relative; 
+      padding-bottom: 0;
+      border: none;
+      box-shadow: 0 0 10px rgba(0,0,0,.2);
+    }
+    
+    thead {
+      float: left;
+      white-space: nowrap;
+    }
+    
+    tbody {
+      overflow-x: auto;
+      overflow-y: hidden;
+      position: relative;
+      white-space: nowrap;
+    }
+    
+    tr {
+      display: inline-block;
+      vertical-align: top;
+    }
+    
+    th {
+      border-bottom: 1px solid #a39485;
+    }
+    
+    td {
+      border-bottom: 1px solid #e5e5e5;
+    }
+    
+    
+    }
