@@ -1,0 +1,87 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: NHN CD
+
+on:
+  push:
+    branches: [ "deploy" ]
+  pull_request:
+    branches: [ "deploy" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./eco-location
+    steps:
+    - uses: actions/checkout@v3
+    # React 프로젝트이므로 해당 환경을 Node.js 위에서 실행하겠다고 명시한다.
+    # 마찬가지로 누군가 만들어 놓은 Action이다.
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.5.2
+      with:
+        node-version: lts/Hydrogen
+    # push할 때마다 npm을 install 해야할까? 아니다.
+    # 해당 프로젝트의 node_modules가 변했는지 안 변했는지를 이용해서
+    # 모듈 변화가 있을 때만 npm install을 해줄 수도 있다.
+    - name: Cache node modules
+      # 그걸 제공하는 Action도 있다.
+      uses: actions/cache@v2.1.8
+      # 해당 step을 대표하는 id를 설정할 수도 있다. 해당 값은 뒤의 step에서 사용한다.
+      id: cache
+      with:
+        # node_modules라는 폴더를 검사하여
+        path: node_modules
+        # 아래 키값으로 cache가 돼있는지 확인한다.
+        key: npm-packages-${{ hashFiles('**/package-lock.json') }}
+
+      # 위 step에서 node_modules에 대한 cache 검사를 했다.
+      # 만약 모듈에 변한 게 있다면 `npm install`을 실행하고 아니면 해당 step을 건너뛰게 된다.
+      # if 키워드는 해당 스텝을 실행할지 말지를 결정할 수 있는 키워드이다.
+      # 위 step에서 정했던 cache라는 id를 steps.cache로 가져올 수 있다.
+      # cache라는 id 값을 가진 step에서는 cache-hit라는 output을 내뱉는다. 
+      # 그걸로 cache가 hit 됐는지 안 됐는지를 알 수 있다.
+      # 그 값이 true가 아닐 때만 npm install을 한다.
+      # https://fe-developers.kakaoent.com/2022/220106-github-actions/
+    - name: Install Dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm install
+
+    - name: Build
+      run: npm run build
+    # 도커 이미지에 env 파일 포함
+    - name: Create .env file
+      run: |
+        touch .env
+        echo REACT_APP_KAKAO_REST_API_KEY=${{ secrets.REACT_APP_KAKAO_REST_API_KEY }}\ >> .env
+      working-directory: ${{ env.working-directory }}
+
+    - name : Build Docker Image
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/eco-location-front .
+      working-directory: ${{ env.working-directory }}
+    - name: DockerHub Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: DockerHub Push
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/eco-location-front
+      working-directory: ${{ env.working-directory }}
+
+# 배포 시작
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: centos
+        key: ${{ secrets.KEY }}
+        script: |
+          sudo docker stop eco-location-front
+          sudo docker rm eco-location-front
+          sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/eco-location-front
+          docker run -d --name eco-location-front --network ${{ secrets.NETWORK }} -p ${{ secrets.USER_PORT }}:${{ secrets.USER_PORT }} ${{ secrets.DOCKERHUB_USERNAME }}/eco-location-front
+          docker image prune -f
