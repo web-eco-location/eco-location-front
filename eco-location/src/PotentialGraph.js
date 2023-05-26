@@ -30,7 +30,7 @@ const EmptyBar = ({ data }) => (    // 데이터 비었을때 띄우는 용도
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: '잠재량 총합(W)',
+            legend: '잠재량 총합(kW)',
             legendPosition: 'middle',
             legendOffset: -70
         }}
@@ -79,7 +79,7 @@ const MyResponsiveBar = ({ data }) => (
         ]}
         indexBy="areaName"  // 가로축
         groupMode="stacked"
-        margin={{ top: 30, right: 50, bottom: 80, left: 130 }}
+        margin={{ top: 30, right: 50, bottom: 80, left: 100 }}
         padding={0.3}
         valueScale={{ type: 'linear' }}  // 리니어 테스트시 axisLeft-tickValues 주석처리
         // valueScale={{ type: 'symlog' }}
@@ -109,12 +109,13 @@ const MyResponsiveBar = ({ data }) => (
             //         return Math.pow(10, index+1);
             //     }
             // }),
+            // format: (value) => `${value * 1000}`,
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
-            legend: '잠재량 총합(W)',
+            legend: '잠재량 총 합(kW)',
             legendPosition: 'middle',
-            legendOffset: -100
+            legendOffset: -70
         }}
         tooltip={({ data }) => // 마우스 올리면 뜨는 창
             <div style={{ padding: 12, background: '#222222' }}>
@@ -123,15 +124,15 @@ const MyResponsiveBar = ({ data }) => (
                         {data.areaName}
                     </div>
                     <div style={{ color:"#fbb4ae" }}>
-                        태양에너지: {data.태양에너지?data.태양에너지:"0"}W
+                        태양에너지: {data.태양에너지?data.태양에너지:"0"}kW
                     </div>
                     <div style={{ color:"#b3cde3" }}>
-                        풍력에너지: {data.풍력에너지?data.풍력에너지:"0"}W
+                        풍력에너지: {data.풍력에너지?data.풍력에너지:"0"}kW
                     </div>
                 </strong>
             </div>
         }
-        label={d => `${Math.floor((d.value)*100)/100}`}
+        // label={d => `${Math.floor((d.value)*100)/100}`}
         labelSkipWidth={10}
         labelSkipHeight={10}
         labelTextColor={{
@@ -174,15 +175,22 @@ const MyResponsiveBar = ({ data }) => (
 );
 
 class PotentialGraph extends React.Component {
+    transformData = (data) => { // 단위 변경
+        return data.map((item) => ({
+            areaName: item.areaName,
+            태양에너지: Math.floor((item.태양에너지)/10)/100,
+            풍력에너지: Math.floor((item.풍력에너지)/10)/100
+        }));  
+    };
+    
     render() {
-        console.log(this.props);
         let bar;
         if(this.props.isEmpty) {
             console.log("empty");
             bar = <EmptyBar data={this.props.items} />
         } else {
             console.log("not empty");
-            bar = <MyResponsiveBar data={this.props.items} />
+            bar = <MyResponsiveBar data={this.transformData(this.props.items)} />
         }
 
         return(

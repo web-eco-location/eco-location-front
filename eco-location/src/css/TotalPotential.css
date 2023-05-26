@@ -16,11 +16,13 @@ div.sideController {
   background-color: wheat;
   position: absolute;
   top:0px;
-  right: 25vw;
+  right: 27vw;
   margin: 20px;
   z-index: 5;
 }
 div.legendContainer {
+  width: 192px;
+  height: 345px;
   border: 2px solid orange;
 }
 div.legendContainer > div.range {
@@ -32,7 +34,7 @@ div.legendContainer > div.range > div.color {
   margin: 6px;
 }
 div.legendContainer > div.range > div.lbl {
-  width: 200px;
+  width: 160px;
   line-height: 32px;
   text-align: center;
 }
@@ -66,11 +68,13 @@ div.side > div.title {
 }
 div.side > div.info {
   font-size: 14px;
+  margin: 10px 0;
 }
 div.side > div.pieContainer {
-  width: 340px;
+  width: 380px;
   height: 300px;
   overflow: hidden;
+  /* border: 1px solid red */
 }
 
 div.small {
