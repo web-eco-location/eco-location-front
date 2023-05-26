@@ -3,7 +3,7 @@ import './css/RenewablePercent.css';
 import Map from './PercentMap';
 import {call} from './service/ApiService';
 
-class Renewable_percent extends React.Component { // 지역별 잠재량 페이지
+class Renewable_percent extends React.Component { // 지역별 생산비율 페이지
     constructor(props) {  
         super(props);
         this.state = {
@@ -18,11 +18,11 @@ class Renewable_percent extends React.Component { // 지역별 잠재량 페이�
         maxValue = items.reduce((max, p) => p.renewableEnergyPercent > max ? p.renewableEnergyPercent : max, items[0].renewableEnergyPercent); 
         minValue = items.reduce((min, p) => p.renewableEnergyPercent < min ? p.renewableEnergyPercent : min, items[0].renewableEnergyPercent); 
         d = (maxValue-minValue)/10;
-        console.log(maxValue, minValue, d);
+
         var newbgData = {"min": minValue, "d": d};
         if(JSON.stringify(this.state.bgData)!=JSON.stringify(newbgData)) {
-            this.setState({bgData: newbgData}, () => {this.drawLegend()});
-        } 
+            this.setState({bgData: newbgData}, () => {this.drawLegend(); this.sideInfo();});
+        }
     }
 
     drawLegend = () => {
@@ -35,8 +35,8 @@ class Renewable_percent extends React.Component { // 지역별 잠재량 페이�
             range.className = "range";
             range.innerHTML = "<div class='color' style='background-color:"+backgroundColor+"'></div>"+
                                 "<div class='lbl'>"+ 
-                                Math.floor((this.state.bgData.min+i*this.state.bgData.d)*1000)/1000+" ~ "+ 
-                                Math.ceil((this.state.bgData.min+(i+1)*this.state.bgData.d)*1000)/1000 +
+                                    Math.round((this.state.bgData.min+i*this.state.bgData.d)*10000)/100+" - "+ 
+                                    Math.round((this.state.bgData.min+(i+1)*this.state.bgData.d)*10000)/100 +
                                 "</div>";
             legendContainer.appendChild(range);
         }
@@ -59,7 +59,7 @@ class Renewable_percent extends React.Component { // 지역별 잠재량 페이�
     }
     
     componentDidMount() {
-        // 실제 사용? 작년 날짜만 가능
+        // 현재 작년 날짜만 가능
         const year = new Date().getFullYear() -1;
         call("/areageneratorsource?start="+year+"-01-01&end="+year+"-12-31", "GET", null).then((response) =>
             this.setState({items:response, loading:false}, () => {
