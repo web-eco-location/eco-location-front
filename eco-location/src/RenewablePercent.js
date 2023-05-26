@@ -3,7 +3,7 @@ import './css/RenewablePercent.css';
 import Map from './PercentMap';
 import {call} from './service/ApiService';
 
-class Renewable_percent extends React.Component { // 지역별 생산비율 페이지
+class RenewablePercent extends React.Component { // 지역별 생산비율 페이지
     constructor(props) {  
         super(props);
         this.state = {
@@ -108,4 +108,4 @@ class Renewable_percent extends React.Component { // 지역별 생산비율 페�
     }
 }
 
-export default Renewable_percent;
+export default RenewablePercent;

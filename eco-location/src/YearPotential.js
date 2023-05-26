@@ -7,6 +7,11 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
     constructor(props) {
         super(props);
         this.state = {
+            startYear: "",
+            startMonth: "",
+            endYear: "",
+            endMonth: "",
+            today: "",
             items: [],
             isEmpty: true,
             loading: true
@@ -14,14 +19,14 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
     }
     
     drawGraph = () => { // 말이 draw지 사실상 componentDidUpdate 그런데 datetime만 반응하는
-        if(!this.state.startDate||!this.state.startTime||!this.state.endDate||!this.state.endTime) {
+        if(!this.state.startYear||!this.state.startMonth||!this.state.endYear||!this.state.endMonth) {
             this.setState({isEmpty: true});
             return;
         }
 
         // 사용자로부터 입력받은 날짜와 시간
-        var start = this.state.startDate + " " + this.state.startTime + ":00";
-        var end = this.state.endDate + " " + this.state.endTime + ":00";
+        var start = this.state.startYear + "-" + this.state.startMonth;
+        var end = this.state.endYear + "-" + this.state.endMonth;
         
         // start가 더 늦을경우
         if(new Date(start)>new Date(end)) {
@@ -30,6 +35,18 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
             end = tmp;
         }
         
+        var endDate = new Date(this.state.endYear, this.state.endMonth, 0).getDate()
+        start += "-01 00:00:00";
+        end += "-" + endDate + " 23:59:59";
+        
+        // 로딩 중에 선택 막기
+        var selectWrap = document.querySelectorAll(".selectWrap");
+        selectWrap.forEach((wrap)=>{
+            Array.from(wrap.children).forEach((select)=>{
+                select.disabled=true;
+            })
+        });
+
         // 로딩 표시
         var emptyInfo = document.querySelector(".emptyInfo");
         emptyInfo.innerHTML = "로딩중...";
@@ -40,7 +57,11 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
             this.setState(this.dataCleaning(response), () => {
                 emptyInfo.innerHTML = "조회된 데이터가 없습니다.";
                 if(!this.state.isEmpty) emptyInfo.style.display="none";
-                console.log(this.state);
+                selectWrap.forEach((wrap)=>{
+                    Array.from(wrap.children).forEach((select)=>{
+                        select.disabled=false;
+                    })
+                });
             })
         );
     }
@@ -113,14 +134,52 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
             <div className='graphPageContainer'>
                 <div className='datetimeContainer'>
                     기간:
-                    <div className='inputWrap'>
-                        <input id="dateInput" name="startDate" type="date" min="2020-01-01" max={this.state.today} onChange={this.handleChange} />
-                        <input id="timeInput" name="startTime" type="time" onChange={this.handleChange} />
+                    <div className='selectWrap'>
+                        <select id="startYear" name="startYear" onChange={this.handleChange}>
+                            <option value="">년도</option>
+                            <option value="2020">2020년</option>
+                            <option value="2021">2021년</option>
+                            <option value="2022">2022년</option>
+                        </select>
+                        <select id="startMonth" name="startMonth" onChange={this.handleChange}>
+                            <option value="">월</option>
+                            <option value="01">1월</option>
+                            <option value="02">2월</option>
+                            <option value="03">3월</option>
+                            <option value="04">4월</option>
+                            <option value="05">5월</option>
+                            <option value="06">6월</option>
+                            <option value="07">7월</option>
+                            <option value="08">8월</option>
+                            <option value="09">9월</option>
+                            <option value="10">10월</option>
+                            <option value="11">11월</option>
+                            <option value="12">12월</option>
+                        </select>
                     </div>
                     ㅡ
-                    <div className='inputWrap'>
-                        <input id="dateInput" name="endDate" type="date" min="2020-01-01" max={this.state.today} onChange={this.handleChange} />
-                        <input id="timeInput" name="endTime" type="time" onChange={this.handleChange} />
+                    <div className='selectWrap'>
+                        <select id="endYear" name="endYear" onChange={this.handleChange}>
+                            <option value="">년도</option>
+                            <option value="2020">2020년</option>
+                            <option value="2021">2021년</option>
+                            <option value="2022">2022년</option>
+                        </select>
+                        <select id="endMonth" name="endMonth" onChange={this.handleChange}>
+                            <option value="">월</option>
+                            <option value="01">1월</option>
+                            <option value="02">2월</option>
+                            <option value="03">3월</option>
+                            <option value="04">4월</option>
+                            <option value="05">5월</option>
+                            <option value="06">6월</option>
+                            <option value="07">7월</option>
+                            <option value="08">8월</option>
+                            <option value="09">9월</option>
+                            <option value="10">10월</option>
+                            <option value="11">11월</option>
+                            <option value="12">12월</option>
+                        </select>
                     </div>
                 </div>
                 {graph}
