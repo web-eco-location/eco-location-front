@@ -1,7 +1,7 @@
 import React from "react";
 import "./css/index.css";
 
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 
 import Header from "./Header.js"
 
@@ -21,25 +21,26 @@ class AppRouter extends React.Component {
                 <Header/>
                 <div>
                     <Routes>
-                        {/* <Route path="/" element={<TestPage />}></Route> */}
+                        {/* 기본 페이지는 재생에너지 전환율 페이지로 */}
+                        <Route path="/" element={<Navigate to="/renewable-percent" />} />
                         
                         {/* 과거 재생에너지 발전량 */}
-                        {/* <Route path="/Gen_total" element={<Gen_total />}></Route> */}
-                        {/* <Route path="/Gen_year" element ={<Gen_year />}></Route> */}
-                        {/* <Route path="/Gen_detail" element ={<Gen_detail />}></Route> */}
+                        {/* <Route path="/gen-total" element={<Gen_total />}></Route> */}
+                        {/* <Route path="/gen-year" element ={<Gen_year />}></Route> */}
+                        {/* <Route path="/gen-detail" element ={<Gen_detail />}></Route> */}
 
                         {/* 재생에너지 잠재력 확인 */}
-                        <Route path="/potential_total" element={<TotalPotential/>}></Route>
-                        <Route path="/potential_year" element={<YearPotential/>}></Route>
+                        <Route path="/potential-total" element={<TotalPotential/>}></Route>
+                        <Route path="/potential-year" element={<YearPotential/>}></Route>
                         
                         {/* 기존 발전소 */}
-                        <Route path="/exist_gen" element={<Exist_Gen/>}></Route>
+                        <Route path="/exist-gen" element={<Exist_Gen/>}></Route>
 
                         {/* 재생에너지 전환율 */}
-                        <Route path="/renewable_percent" element={<Renewable_percent/>}></Route>
+                        <Route path="/renewable-percent" element={<Renewable_percent/>}></Route>
 
                         {/* API 테스트용 페이지 */}
-                        <Route path="/test_page" element={<API_Test_Page/>}></Route>
+                        <Route path="/test-page" element={<API_Test_Page/>}></Route>
 
                     </Routes>
                 </div>
