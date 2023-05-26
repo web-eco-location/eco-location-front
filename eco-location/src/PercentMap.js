@@ -12,7 +12,7 @@ function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
     // 이벤트
     var customOverlay = new window.kakao.maps.CustomOverlay({});
     var innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 재생에너지 생산 비율</div>"+
-                        "<div class='info'>"+Math.round(data*10000)/100+"%</div>";
+                        "<div class='info'>"+data+"%</div>";
 
     // 마우스오버 - 배경색 변경 + 커스텀오버레이 표시
     var mouseOverHandler = function(mouseEvent) {
