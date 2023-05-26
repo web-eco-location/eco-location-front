@@ -3,7 +3,7 @@ import './css/PotentialMap.css';
 import boundaryData from "./boundary_potential.json";
 
 function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
-    if(!bgData||!boundary) return;
+    if(!bgData) return;
 
     // 배경색 변경
     var backgroundColor = bgData.bg0+ Math.floor(15-(data-bgData.min)/bgData.d).toString(16) +bgData.bg1;
@@ -12,14 +12,11 @@ function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
     var customOverlay = new window.kakao.maps.CustomOverlay({});
     var innerContent;
     if(bgData.bg0.length===3) {
-        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 잠재량 총합</div>"+
-                    "<div class='info'>"+Math.round(data/10)/100+"kW</div>";
+        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 잠재량 총합</div><div class='info'>"+data+"W/m²</div>";
     } else if(bgData.bg0.length===1) {
-        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 태양에너지 잠재량 총합</div>"+
-                    "<div class='info'>"+Math.round(data/10)/100+"kW</div>";
+        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 태양에너지 잠재량 총합</div><div class='info'>"+data+"W/m²</div>";
     } else { 
-        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 풍력에너지 잠재량 총합</div>"+
-                    "<div class='info'>"+Math.round(data/10)/100+"kW</div>";
+        innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 풍력에너지 잠재량 총합</div><div class='info'>"+data+"W/m²</div>";
     }
 
     // 마우스오버 - 배경색 변경 + 커스텀오버레이 표시
@@ -66,7 +63,12 @@ function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
     content.addEventListener('mouseover', () => {
         polygons.forEach((polygon) => { polygon.setOptions({fillColor: '#FF0'}) });
         
-        customInfo.innerHTML = innerContent;
+        if(bgData.bg0.length===3)
+            customInfo.innerHTML = innerContent;
+        else if(bgData.bg0.length===1)
+            customInfo.innerHTML = innerContent;
+        else 
+            customInfo.innerHTML = innerContent;
         customInfo.style.display = 'block';
     });
     content.addEventListener('mouseleave', () => {
@@ -137,16 +139,14 @@ class KakaoMap extends React.Component {
             fillOpacity: 0.6 // 채우기 투명도
         });
         back.setMap(map);
-
-        if(this.props.by==="null"||!this.props.items) return;
     
         // 다각형 그리기
         this.props.items.forEach((item) => {
-            if(this.props.by==="total") {
+            if(this.props.by=="total") {
                 polygon(map, boundaryData.features.find((b) => b.properties.CTP_KOR_NM===item.areaName), this.props.bgData, item.potentialAmount);
-            } else if(this.props.by==="source1") {
+            } else if(this.props.by=="source1") {
                 polygon(map, boundaryData.features.find((b) => b.properties.CTP_KOR_NM===item.areaName), this.props.bgData, item.solarEnergyPotential);
-            } else if(this.props.by==="source2") {
+            } else if(this.props.by=="source2") {
                 polygon(map, boundaryData.features.find((b) => b.properties.CTP_KOR_NM===item.areaName), this.props.bgData, item.windEnergyPotential);
             }
         });
@@ -154,7 +154,7 @@ class KakaoMap extends React.Component {
 
     componentDidUpdate() {
         // 스크립트 로드 완료 여부 확인
-        if (typeof window.kakao !== "undefined" && typeof window.kakao.maps !== "undefined" && typeof window.kakao.maps.LatLng !== "undefined") {
+        if (typeof window.kakao !== "undefined" && typeof window.kakao.maps !== "undefined") {
             // 지도 그리기
             this.map();
         }
@@ -171,9 +171,7 @@ class KakaoMap extends React.Component {
         // 지도 그리기
         script.onload = () => { 
             window.kakao.maps.load(() => {
-                if (typeof window.kakao !== "undefined" && typeof window.kakao.maps !== "undefined" && typeof window.kakao.maps.LatLng !== "undefined") {
-                    this.map();
-                }
+                this.map()
             })
         };
     }

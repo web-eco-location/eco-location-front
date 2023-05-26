@@ -11,7 +11,7 @@ div.pageContainer {
   position: relative;
 }
 /* 지도안의 컨트롤러 */
-/* div.sideController {
+div.sideController {
   margin-top: 60px;
   background-color: wheat;
   position: absolute;
@@ -19,10 +19,8 @@ div.pageContainer {
   right: 25vw;
   margin: 20px;
   z-index: 5;
-} */
+}
 div.legendContainer {
-  width: 192px;
-  height: 345px;
   border: 2px solid orange;
 }
 div.legendContainer > div.range {
@@ -34,7 +32,7 @@ div.legendContainer > div.range > div.color {
   margin: 6px;
 }
 div.legendContainer > div.range > div.lbl {
-  width: 160px;
+  width: 200px;
   line-height: 32px;
   text-align: center;
 }
@@ -69,11 +67,11 @@ div.side > div.title {
 div.side > div.info {
   font-size: 14px;
 }
-/* div.side > div.pieContainer {
+div.side > div.pieContainer {
   width: 340px;
   height: 300px;
   overflow: hidden;
-} */
+}
 
 div.small {
   font-size: 10px;
