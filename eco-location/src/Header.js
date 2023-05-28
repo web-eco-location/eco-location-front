@@ -8,34 +8,20 @@ class Header extends React.Component {
             <div className="headerContainer">
                 <div className="nav">
                     <div className="item">
-                        <Link to="/">에코로케이션</Link>
+                        <Link to="/gen-total">과거 재생에너지 발전량</Link>
                     </div>
                     <div className="item">
-                        <Link to="/Gen_total">과거 재생에너지 발전량</Link>
+                        <Link to="/potential-total">재생에너지 잠재량 확인</Link>
                         <div className="dropdown">
-                            <Link to="/Gen_total">지역별 발전량</Link>
-                            <Link to="/Gen_year">연도별 발전량</Link>
-                            <Link to="/Gen_detail">지역별 발전량 상세</Link>
+                            <Link to="/potential-total">지역별 잠재량</Link>
+                            <Link to="/potential-year">시간별 잠재량</Link>
                         </div>
                     </div>
                     <div className="item">
-                        <Link to="/potential_total">재생에너지 잠재량 확인</Link>
-                        <div className="dropdown">
-                            <Link to="/potential_total">지역별 잠재량</Link>
-                            <Link to="/potential_year">시간별 잠재량</Link>
-                        </div>
+                        <Link to="/exist-gen">기존 발전소 확인</Link>
                     </div>
                     <div className="item">
-                        <Link to="/exist_gen">기존 발전소</Link>
-                        <div className="dropdown">
-                            <Link to="/exist_gen">지역별 발전소 확인</Link>
-                        </div>
-                    </div>
-                    <div className="item">
-                        <Link to="/renewable_percent">재생에너지 전환율</Link>
-                        <div className="dropdown">
-                            <Link to="/renewable_percent">국내 재생에너지 생산비율</Link>
-                        </div>
+                        <Link to="/renewable-percent">재생에너지 전환율</Link>
                     </div>
                 </div>
             </div>
