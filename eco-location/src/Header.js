@@ -9,11 +9,6 @@ class Header extends React.Component {
                 <div className="nav">
                     <div className="item">
                         <Link to="/gen-total">과거 재생에너지 발전량</Link>
-                        <div className="dropdown">
-                            <Link to="/gen-total">지역별 발전량</Link>
-                            <Link to="/gen-year">연도별 발전량</Link>
-                            <Link to="/gen-detail">지역별 발전량 상세</Link>
-                        </div>
                     </div>
                     <div className="item">
                         <Link to="/potential-total">재생에너지 잠재량 확인</Link>
