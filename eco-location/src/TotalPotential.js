@@ -11,7 +11,6 @@ class MyResponsivePie extends React.Component { // 전체 데이터 파이 그�
         else if(this.props.by==="source1") valueKey = "solarEnergyPotential";
         else valueKey = "windEnergyPotential";
     
-        console.log(this.props.data);
         return ( 
             <ResponsivePie
                 data={this.props.data}
