@@ -6,9 +6,6 @@ import { ResponsiveBar } from '@nivo/bar';
 
 class MyResponsiveBar extends React.Component { // 지역의 데이터 막대 그래프
     render() {
-        console.log("bar", this.props.selectedArea, this.props.data);
-        console.log(this.props.data.forEach((yearData)=>{console.log(yearData)}));
-
         var newData = [];
         this.props.data.forEach((yearData) => {
             newData.push({
@@ -17,7 +14,7 @@ class MyResponsiveBar extends React.Component { // 지역의 데이터 막대 �
             });
         });
         newData.sort((a, b) => a.year - b.year);
-        console.log("cleaning", newData);
+        
         return(
             <ResponsiveBar
                 data={newData}
@@ -55,21 +52,6 @@ class MyResponsiveBar extends React.Component { // 지역의 데이터 막대 �
                     legendPosition: 'middle',
                     legendOffset: -70
                 }}
-                // tooltip={({ data }) => // 마우스 올리면 뜨는 창
-                //     <div style={{ padding: 12, background: '#222222' }}>
-                //         <strong>
-                //             <div style={{ color:"white" }}>
-                //                 {data.areaName}
-                //             </div>
-                //             <div style={{ color:"#fbb4ae" }}>
-                //                 태양에너지: {data.태양에너지?data.태양에너지:"0"}kW
-                //             </div>
-                //             <div style={{ color:"#b3cde3" }}>
-                //                 풍력에너지: {data.풍력에너지?data.풍력에너지:"0"}kW
-                //             </div>
-                //         </strong>
-                //     </div>
-                // }
                 labelSkipWidth={10}
                 labelSkipHeight={10}
                 labelTextColor={{
@@ -135,8 +117,8 @@ class RenewablePercent extends React.Component { // 지역별 생산비율 페�
         console.log(maxValue, minValue, d);
         var newbgData = {"min": minValue, "d": d};
         if(JSON.stringify(this.state.bgData)!=JSON.stringify(newbgData)) {
-            this.setState({bgData: newbgData}, () => {this.drawLegend()});
-        } 
+            this.setState({bgData: newbgData}, () => {this.drawLegend();});
+        }
     }
 
     drawLegend = () => {
@@ -190,7 +172,7 @@ class RenewablePercent extends React.Component { // 지역별 생산비율 페�
     
     handleChange = (event) => {
         const { name, value } = event.target;
-        this.setState({ [name]: value, selectedArea:"" }, () => {this.calcBackgroundColor(this.state.items.find((i) => i.year==this.state.year).data);});
+        this.setState({ [name]: value }, () => {this.calcBackgroundColor(this.state.items.find((i) => i.year==this.state.year).data);});
     }
 
     componentDidMount() {
@@ -204,7 +186,8 @@ class RenewablePercent extends React.Component { // 지역별 생산비율 페�
                 if(newItems.length===(year-2017)) {
                     this.setState({year:year, items:newItems, loading:false}, () => {
                         this.calcBackgroundColor(this.state.items.find((i) => i.year==year).data); 
-                        
+                        this.sideInfo();
+
                         const select = document.getElementById("yearSelect");
                         select.innerHTML = "";
                         for (let y = year; y >= 2018; y--) {

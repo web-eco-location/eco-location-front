@@ -178,11 +178,9 @@ class PotentialGraph extends React.Component {
         console.log(this.props);
         let bar;
         if(this.props.isEmpty) {
-            console.log("empty");
             bar = <EmptyBar data={this.props.items} />
         } else {
-            console.log("not empty");
-            bar = <MyResponsiveBar data={this.props.items} />
+            bar = <MyResponsiveBar data={this.transformData(this.props.items)} />
         }
 
         return(
