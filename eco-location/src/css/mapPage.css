@@ -1,0 +1,164 @@
+div.container {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+div.container > h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+div.pageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 60px);
+  position: relative;
+}
+
+/* 지도 */
+div.mapContainer {
+  padding: 0;
+  margin: 0;
+  box-sizing: content-box;
+  width: calc( 100vw - 440px );
+  height: 100%;
+  overflow: hidden;
+}
+div#map {
+  width: 100%;
+  height: 100%;
+}
+/* 지도 위 구역이름 표시 라벨 - 커스텀 오버레이 */
+div.label {
+  color: lightyellow;
+  text-shadow: -1px 0px black, 0px 1px black, 1px 0px black, 0px -1px black;
+  font-size: 18px;
+  font-weight: bold;
+}
+/* 지도 위 구역이름 라벨 위에 띄울 div */
+div.customInfo {
+  min-width: 200px;
+  min-height: 60px;
+  text-align: center;
+  justify-content: center;
+  background-color: white;
+  pointer-events: none;
+  z-index: 5;
+  position: absolute;
+  background: #fff;
+  border: 2px solid #888;
+  padding: 16px;
+}
+div.customInfo > div.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* 지도안의 컨트롤러 */
+div.sideController {
+  position: absolute;
+  top: 0px;
+  right: 440px;
+  margin: 20px;
+  z-index: 5;
+}
+div.legendContainer {
+  width: 192px;
+  height: 345px;
+  background-color: wheat;
+  border: 2px solid orange;
+}
+div.legendContainer > div.range {
+  display: flex;
+}
+div.legendContainer > div.range > div.color {
+  width: 20px;
+  height: 20px;
+  margin: 6px;
+}
+div.legendContainer > div.range > div.lbl {
+  width: 160px;
+  line-height: 32px;
+  text-align: center;
+}
+div.checkboxContainer {
+  background-color: wheat;
+  border: 2px solid orange;
+  border-top: 0;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+}
+div.checkboxContainer > label {
+  margin: 4px;
+}
+label > input[type='checkbox'] {
+  accent-color: #444444;
+}
+div.selectContainer {
+  border: 2px solid orange;
+  background-color: brown;
+  width: 192px;
+}
+div.selectContainer > select {
+  width: 192px;
+  height: 30px;
+}
+
+/* 지도 우측하단 소계(생산비율) */
+div.totalInfo {
+  position: absolute;
+  bottom:0px;
+  right: 440px;
+  padding: 12px;
+  margin: 20px;
+  background-color: white;
+  border: 1px solid black;
+  z-index: 5;
+}
+div.totalInfo > div.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* 지도 우측 사이드 */
+div.sideArea {
+  width: 440px;
+  height: 100%;
+  background-color: white;
+  padding: 30px;
+  box-sizing: border-box;
+  text-align: left;
+  overflow: hidden;
+}
+div.sideArea > div.title {
+  font-size: 20px;
+  font-weight: bold;
+}
+div.sideArea > div.info {
+  font-size: 14px;
+  margin: 10px 0;
+}
+div.sideArea > div.pieContainer {
+  width: 380px;
+  height: 300px;
+}
+div.sideArea > div.barContainer {
+  width: 380px;
+  height: 340px;
+}
+
+/* 공통 */
+div.small {
+  font-size: 10px;
+  margin-bottom: 10px;
+  text-align: right;
+  margin-right: 10px;
+}
+hr {
+  margin-top: 16px;
+  border: 1px solid gray;
+}
