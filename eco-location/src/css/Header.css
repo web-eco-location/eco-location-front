@@ -16,13 +16,11 @@ div.nav {
 }
 /* 드롭다운 컨테이너 */
 div.item {
-    /* min-width: 160px; */
     text-align: center;
     height: 60px;
     float: left;
     overflow: hidden;
     font-family: Arial;
-    /* position: relative; */
 }
 /* 드롭다운 내 앵커 */
 div.item > a {
@@ -42,23 +40,21 @@ div.dropdown {
     font-size: 13px;
     font-weight: bold;
     position: absolute;
-    /* max-width: 160px; */
-    /* width: 100%; */
     text-align: center;
     z-index: 15;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    width: 208px;
+    align-items: center;
 }
 /* 드롭다운 콘텐츠 내 앵커 */
 div.dropdown > a {
     margin-top: 2px;
     background-color: white;
-    /* float: none; */
     color: black;
     text-align: center;
     padding: 8px 16px;
     text-decoration: none;
     display: block;
-    text-align: left;
     z-index: 10;
 }
 
@@ -69,7 +65,7 @@ div.item:hover {
 
 /* 드롭다운 컨테이너에 호버일때 콘텐츠 보이기 */
 div.item:hover > div.dropdown {
-    display: flex;
+    display: block;
 }
 
 /* 드롭다운 콘텐츠에 호버일 때 색 바꾸기 */
