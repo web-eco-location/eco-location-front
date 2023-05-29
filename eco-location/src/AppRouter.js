@@ -37,7 +37,7 @@ class AppRouter extends React.Component {
                         <Route path="/exist-gen" element={<Exist_Gen/>}></Route>
 
                         {/* 재생에너지 전환율 */}
-                        <Route path="/renewable_percent" element={<RenewablePercent/>}></Route>
+                        <Route path="/renewable-percent" element={<RenewablePercent/>}></Route>
 
                         {/* API 테스트용 페이지 */}
                         <Route path="/test-page" element={<API_Test_Page/>}></Route>
