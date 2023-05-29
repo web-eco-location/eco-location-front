@@ -7,8 +7,8 @@ import Header from "./Header.js"
 
 import TotalPotential from "./TotalPotential";
 import YearPotential from "./YearPotential";
+import Gen_total from './Gen_total';
 import RenewablePercent from "./RenewablePercent";
-// import Gen_total from './Gen_total';
 // import Gen_detail from './Gen_detail';
 // import Gen_year from './Gen_year';
 import API_Test_Page from './API_Test_Page';
@@ -25,7 +25,7 @@ class AppRouter extends React.Component {
                         <Route path="/" element={<Navigate to="/renewable-percent" />} />
                         
                         {/* 과거 재생에너지 발전량 */}
-                        {/* <Route path="/gen-total" element={<Gen_total />}></Route> */}
+                        <Route path="/gen-total" element={<Gen_total />}></Route>
                         {/* <Route path="/gen-year" element ={<Gen_year />}></Route> */}
                         {/* <Route path="/gen-detail" element ={<Gen_detail />}></Route> */}
 
