@@ -1,4 +1,4 @@
-div.container {
+/* div.container {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -9,18 +9,20 @@ div.pageContainer {
   align-items: center;
   height: calc(100vh - 50px);
   position: relative;
-}
+} */
 /* 지도안의 컨트롤러 */
-div.sideController {
+/* div.sideController {
   margin-top: 60px;
-  background-color: wheat;
   position: absolute;
   top:0px;
   right: 25vw;
   margin: 20px;
   z-index: 5;
-}
-div.legendContainer {
+} */
+/* div.legendContainer {
+  background-color: wheat;
+  width: 192px;
+  height: 345px;
   border: 2px solid orange;
 }
 div.legendContainer > div.range {
@@ -35,22 +37,30 @@ div.legendContainer > div.range > div.lbl {
   width: 200px;
   line-height: 32px;
   text-align: center;
-}
-div.checkboxContainer {
+} */
+div.selectContainer {
   border: 2px solid orange;
-  border-top: 0;
-  padding: 4px;
-  display: flex;
-  flex-direction: column;
+  background-color: brown;
+  width: 192px;
 }
-div.checkboxContainer > label {
-  margin: 4px;
+div.selectContainer > select {
+  width: 192px;
+  height: 30px;
 }
-label > input[type='checkbox'] {
-  accent-color: #444444;
+div.totalInfo {
+  /* width: 240px; */
+  position: absolute;
+  bottom:0px;
+  right: 27vw;
+  padding: 12px;
+  margin: 20px;
+  background-color: white;
+  border: 1px solid black;
+  z-index: 5;
+  /* margin-bottom: 20px; */
 }
 /* 지도 우측 사이드 */
-div.side {
+/* div.side {
   width: 25vw;
   height: 100%;
   background-color: white;
@@ -58,24 +68,25 @@ div.side {
   padding: 16px;
   box-sizing: border-box;
   text-align: left;
+} */
+div.side > div.barContainer {
+  width: 380px;
+  height: 300px;
+  overflow: hidden;
+  /* border: 1px solid red */
 }
-div.side > div.title {
+div.totalInfo > div.title {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 }
-div.side > div.info {
+/* div.totalInfo > div.info {
   font-size: 14px;
-}
-div.side > div.pieContainer {
-  width: 340px;
-  height: 300px;
-  overflow: hidden;
-}
+} */
 
-div.small {
+/* div.small {
   font-size: 10px;
   margin-bottom: 10px;
   text-align: right;
   margin-right: 10px;
-}
+}  */

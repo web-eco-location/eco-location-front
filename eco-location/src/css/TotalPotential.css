@@ -13,7 +13,6 @@ div.pageContainer {
 /* 지도안의 컨트롤러 */
 div.sideController {
   margin-top: 60px;
-  background-color: wheat;
   position: absolute;
   top:0px;
   right: 25vw;
@@ -21,6 +20,9 @@ div.sideController {
   z-index: 5;
 }
 div.legendContainer {
+  width: 192px;
+  height: 345px;
+  background-color: wheat;
   border: 2px solid orange;
 }
 div.legendContainer > div.range {
@@ -37,6 +39,7 @@ div.legendContainer > div.range > div.lbl {
   text-align: center;
 }
 div.checkboxContainer {
+  background-color: wheat;
   border: 2px solid orange;
   border-top: 0;
   padding: 4px;

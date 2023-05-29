@@ -11,6 +11,7 @@ class MyResponsivePie extends React.Component { // 전체 데이터 파이 그�
         else if(this.props.by==="source1") valueKey = "solarEnergyPotential";
         else valueKey = "windEnergyPotential";
     
+        console.log(this.props.data);
         return ( 
             <ResponsivePie
                 data={this.props.data}
@@ -32,7 +33,29 @@ class MyResponsivePie extends React.Component { // 전체 데이터 파이 그�
                         ]
                     ]
                 }}
-                arcLabel={(d) => `${Math.floor((d.value)*100)/100}`}
+                defs={[{
+                    id: 'lines',
+                    type: 'patternLines',
+                    background: 'inherit',
+                    color: 'rgba(255, 255, 255, 0.3)',
+                    rotation: -45,
+                    lineWidth: 6,
+                    spacing: 10
+                }]}
+                fill={[
+                    {
+                        match: {id: '충청남도'},
+                        id: 'lines'
+                    }, {
+                        match: {id: '충청북도'},
+                        id: 'lines'
+                    }, {
+                        match: {id: '경기도'},
+                        id: 'lines'
+                    }
+                ]}
+                valueFormat={value => `${Math.round(value/10)/100}kW`}
+                arcLabel={(d) => `${Math.round((d.value)/10)/100}`}
                 arcLinkLabelsSkipAngle={10}
                 arcLinkLabelsTextColor="#333333"
                 arcLinkLabelsThickness={2}
@@ -136,17 +159,20 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
 
         const year = new Date().getFullYear() -1;
         if(this.state.by==="total") {
-            title.innerHTML = "잠재량 총합";
-            info.innerHTML = "일사량이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공<br/>"+
+            title.innerHTML = "잠재량 총합<hr/>";
+            info.innerHTML = "<div class='small'>* 단위: kW</div><br/>"+
+                            "일사량이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공<br/><br/>"+
                             "풍속이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
                             "<div class='small'>* "+year+"년 자료</div>";
         } else if(this.state.by==="source1") {
-            title.innerHTML = "태양에너지 잠재량 총합";
-            info.innerHTML = "일사량이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
+            title.innerHTML = "태양에너지 잠재량 총합<hr/>";
+            info.innerHTML = "<div class='small'>* 단위: kW</div><br/>"+
+                            "일사량이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
                             "<div class='small'>* "+year+"년 자료</div>";
         } else if(this.state.by==="source2") {
-            title.innerHTML = "풍력에너지 잠재량 총합";
-            info.innerHTML = "풍속이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
+            title.innerHTML = "풍력에너지 잠재량 총합<hr/>";
+            info.innerHTML = "<div class='small'>* 단위: kW</div><br/>"+
+                            "풍속이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
                             "<div class='small'>* "+year+"년 자료</div>";
         }
         
