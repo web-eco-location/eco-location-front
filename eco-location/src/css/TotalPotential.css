@@ -15,7 +15,7 @@ div.sideController {
   margin-top: 60px;
   position: absolute;
   top:0px;
-  right: 27vw;
+  right: 25vw;
   margin: 20px;
   z-index: 5;
 }
@@ -34,7 +34,7 @@ div.legendContainer > div.range > div.color {
   margin: 6px;
 }
 div.legendContainer > div.range > div.lbl {
-  width: 160px;
+  width: 200px;
   line-height: 32px;
   text-align: center;
 }
@@ -69,13 +69,11 @@ div.side > div.title {
 }
 div.side > div.info {
   font-size: 14px;
-  margin: 10px 0;
 }
 div.side > div.pieContainer {
-  width: 380px;
+  width: 340px;
   height: 300px;
   overflow: hidden;
-  /* border: 1px solid red */
 }
 
 div.small {

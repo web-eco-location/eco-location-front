@@ -2,6 +2,7 @@ import React from 'react';
 import './css/Exist_Gen_Map.css'
 import locationData from "./location_coor.json";
 import { Generator_DetailArea } from './service/ApiService';
+import ReactPaginate from 'react-paginate';
 
 class Exist_Gen extends React.Component {
   constructor(props) {
@@ -15,7 +16,9 @@ class Exist_Gen extends React.Component {
       selectedMarkerData:null,
       responseJson:null,
       error:null,
-      sortOrder: 'asc' // 추가: 정렬 순서를 저장하는 상태 변수
+      sortOrder: 'asc', // 추가: 정렬 순서를 저장하는 상태 변수
+      currentPage: 0, // 추가: 현재 페이지 번호를 저장하는 상태 변수
+      itemsPerPage: 8 // 추가: 페이지 당 표시할 항목 수
     };
   }
 
@@ -64,7 +67,8 @@ class Exist_Gen extends React.Component {
       광주광역시: [],
       대구광역시: [],
       경상북도: [],
-      경상남도: []
+      경상남도: [],
+      부산광역시: []
     };
     
     this.state.items.forEach((item) => {
@@ -145,12 +149,23 @@ class Exist_Gen extends React.Component {
     }
   };
 
-  render() {
-    const { selectedMarker, responseJson, sortBy, sortOrder } = this.state;
+  handlePageClick = (data) => {
+    const selectedPage = data.selected;
+    this.setState({
+      currentPage: selectedPage
+    });
+  };
 
+  render() {
+    const { selectedMarker, responseJson, sortBy, sortOrder, currentPage, itemsPerPage } = this.state;
+
+    let sortedData = [];
     let tableContent = null;
     if (responseJson) {
-      const sortedData = [...responseJson].sort((a, b) => {
+
+
+
+      sortedData = [...responseJson].sort((a, b) => {
         if (sortBy === 'generatorName') {
           return sortOrder === 'asc' ? a.generatorName.localeCompare(b.generatorName) : b.generatorName.localeCompare(a.generatorName);
         } else if (sortBy === 'generateAmount') {
@@ -160,6 +175,10 @@ class Exist_Gen extends React.Component {
         }
         return 0;
       });
+
+      const startIndex = currentPage * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const pagedData = sortedData.slice(startIndex, endIndex);
 
       tableContent = (
         <table>
@@ -180,7 +199,7 @@ class Exist_Gen extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {sortedData.map((item, index) => (
+            {pagedData.map((item, index) => (
               <tr key={index}>
                 <td>{item.generatorName}</td>
                 <td>{item.generateAmount} kW</td>
@@ -205,6 +224,23 @@ class Exist_Gen extends React.Component {
                 <div className="tableContainer">
                   {tableContent}
                 </div>
+                {/* 페이징 컴포넌트 추가 */}
+                {responseJson && (
+                  <div className="paginationContainer"> {/* 페이징 컨테이너로 감싸줍니다. */}
+                    <ReactPaginate
+                      previousLabel={'이전'}
+                      nextLabel={'다음'}
+                      breakLabel={'...'}
+                      breakClassName={'break-me'}
+                      pageCount={Math.ceil(responseJson.length / itemsPerPage)}
+                      marginPagesDisplayed={1}
+                      pageRangeDisplayed={1}
+                      onPageChange={this.handlePageClick}
+                      containerClassName={'pagination'}
+                      activeClassName={'active'}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -132,11 +132,11 @@ class RenewablePercent extends React.Component { // 지역별 생산비율 페�
         maxValue = items.reduce((max, p) => p.renewableEnergyPercent > max ? p.renewableEnergyPercent : max, items[0].renewableEnergyPercent); 
         minValue = items.reduce((min, p) => p.renewableEnergyPercent < min ? p.renewableEnergyPercent : min, items[0].renewableEnergyPercent); 
         d = (maxValue-minValue)/10;
-
+        console.log(maxValue, minValue, d);
         var newbgData = {"min": minValue, "d": d};
         if(JSON.stringify(this.state.bgData)!=JSON.stringify(newbgData)) {
-            this.setState({bgData: newbgData}, () => {this.drawLegend(); this.sideInfo();});
-        }
+            this.setState({bgData: newbgData}, () => {this.drawLegend()});
+        } 
     }
 
     drawLegend = () => {
@@ -149,8 +149,8 @@ class RenewablePercent extends React.Component { // 지역별 생산비율 페�
             range.className = "range";
             range.innerHTML = "<div class='color' style='background-color:"+backgroundColor+"'></div>"+
                                 "<div class='lbl'>"+ 
-                                    Math.round((this.state.bgData.min+i*this.state.bgData.d)*10000)/100+" - "+ 
-                                    Math.round((this.state.bgData.min+(i+1)*this.state.bgData.d)*10000)/100 +
+                                Math.floor((this.state.bgData.min+i*this.state.bgData.d)*1000)/1000+" ~ "+ 
+                                Math.ceil((this.state.bgData.min+(i+1)*this.state.bgData.d)*1000)/1000 +
                                 "</div>";
             legendContainer.appendChild(range);
         }
