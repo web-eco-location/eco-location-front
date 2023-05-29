@@ -1,5 +1,5 @@
 import React from "react";
-import './css/PercentMap.css';
+import './css/mapPage.css';
 import boundaryData from "./boundary_percent.json";
 
 function polygon(map, boundary, bgData, data, sideInfo) { // 1회당 도/광역시 하나

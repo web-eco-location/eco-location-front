@@ -1,5 +1,5 @@
 import React from "react";
-import './css/PotentialMap.css';
+import './css/mapPage.css';
 import boundaryData from "./boundary_potential.json";
 
 function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나

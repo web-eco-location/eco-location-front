@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/RenewablePercent.css';
+import './css/mapPage.css';
 import Map from './PercentMap';
 import {call} from './service/ApiService';
 import { ResponsiveBar } from '@nivo/bar';
@@ -23,7 +23,7 @@ class MyResponsiveBar extends React.Component { // 지역의 데이터 막대 �
                 ]}
                 indexBy="year"  // 가로축
                 groupMode="stacked"
-                margin={{ top: 30, right: 50, bottom: 80, left: 100 }}
+                margin={{ top: 30, right: 20, bottom: 60, left: 50 }}
                 padding={0.3}
                 valueScale={{ type: 'linear' }}
                 indexScale={{ type: 'band', round: true }}
@@ -50,7 +50,7 @@ class MyResponsiveBar extends React.Component { // 지역의 데이터 막대 �
                     tickRotation: 0,
                     legend: '생산 비율(%)',
                     legendPosition: 'middle',
-                    legendOffset: -70
+                    legendOffset: -40
                 }}
                 labelSkipWidth={10}
                 labelSkipHeight={10}
@@ -155,17 +155,17 @@ class RenewablePercent extends React.Component { // 지역별 생산비율 페�
 
     sideInfo = (areaName) => {
         // 지도 클릭시 우측에 그 지역 데이터 그래프 그리기
-        const title = document.querySelector('.side .title');
-        const info = document.querySelector('.side .info');
+        const title = document.querySelector('.sideArea .title');
+        const info = document.querySelector('.sideArea .info');
 
         if(areaName) {
-            title.innerHTML = areaName+" 재생에너지 생산 비율 변화";
+            title.innerHTML = areaName+" 재생에너지 생산 비율 변화<hr/>";
             info.innerHTML = "<div class='small'>* 단위: %</div>";
             if(areaName!=this.state.selectedArea) {
                 this.setState({selectedArea:areaName});
             }
         } else {
-            title.innerHTML = "원하시는 지역을 선택하주세요.";
+            title.innerHTML = "원하시는 지역을 선택하세요.";
             info.innerHTML = "";
         }
     }
@@ -225,7 +225,7 @@ class RenewablePercent extends React.Component { // 지역별 생산비율 페�
                     </div>
                 </div>
                 <div className='totalInfo'></div>
-                <div className='side'>
+                <div className='sideArea'>
                     <div className='title'></div>
                     <div className='barContainer'>
                         {bar}

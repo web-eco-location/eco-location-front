@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/TotalPotential.css';
+import './css/mapPage.css';
 import Map from './PotentialMap';
 import {call} from './service/ApiService';
 import { ResponsivePie } from '@nivo/pie'
@@ -43,10 +43,10 @@ class MyResponsivePie extends React.Component { // 전체 데이터 파이 그�
                 }]}
                 fill={[
                     {
-                        match: {id: '충청남도'},
+                        match: {id: '전라남도'},
                         id: 'lines'
                     }, {
-                        match: {id: '충청북도'},
+                        match: {id: '전라북도'},
                         id: 'lines'
                     }, {
                         match: {id: '경기도'},
@@ -226,7 +226,7 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
                     </label>
                 </div>
             </div>
-            <div className='side'>
+            <div className='sideArea'>
                 <div className='title'></div>
                 <div className="pieContainer">
                     {pie}

@@ -81,8 +81,7 @@ const MyResponsiveBar = ({ data }) => (
         groupMode="stacked"
         margin={{ top: 30, right: 50, bottom: 80, left: 100 }}
         padding={0.3}
-        valueScale={{ type: 'linear' }}  // 리니어 테스트시 axisLeft-tickValues 주석처리
-        // valueScale={{ type: 'symlog' }}
+        valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
         colors={{ scheme: 'pastel1' }}
         borderColor={{
@@ -102,14 +101,6 @@ const MyResponsiveBar = ({ data }) => (
             tickRotation: 0
         }}
         axisLeft={{ // 좌측 축
-            // tickValues: Array.from(Array(7).keys()).map((index) => {
-            //     if(index<2) {
-            //         return index*3000+4000;
-            //     } else {
-            //         return Math.pow(10, index+1);
-            //     }
-            // }),
-            // format: (value) => `${value * 1000}`,
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
@@ -132,7 +123,6 @@ const MyResponsiveBar = ({ data }) => (
                 </strong>
             </div>
         }
-        // label={d => `${Math.floor((d.value)*100)/100}`}
         labelSkipWidth={10}
         labelSkipHeight={10}
         labelTextColor={{
