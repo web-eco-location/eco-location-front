@@ -66,11 +66,6 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
         );
     }
 
-    handleChange = (event) => {
-        const { name, value } = event.target;
-        this.setState({ [name]: value }, this.drawGraph);
-    }
-
     dataCleaning = function(items) {
         // 실전 코드
         // 변수명이 어째서 korean인가 하면 표 그릴때 keys 이름 바꾸는 법을 모르겠습니다
@@ -104,6 +99,11 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
             }
         });
         return {items:result, isEmpty:false};
+    }
+    
+    handleChange = (event) => {
+        const { name, value } = event.target;
+        this.setState({ [name]: value }, this.drawGraph);
     }
 
     componentDidMount() {

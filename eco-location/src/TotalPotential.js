@@ -11,6 +11,7 @@ class MyResponsivePie extends React.Component { // 전체 데이터 파이 그�
         else if(this.props.by==="source1") valueKey = "solarEnergyPotential";
         else valueKey = "windEnergyPotential";
     
+        console.log(this.props.data);
         return ( 
             <ResponsivePie
                 data={this.props.data}
@@ -145,7 +146,6 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
 
     sideInfo = () => {
         // 수정) 지도따라 전체데이터 + 설명 띄우기
-        console.log(this.state.by);
         var title = document.querySelector(".title");
         var info = document.querySelector(".info");
 

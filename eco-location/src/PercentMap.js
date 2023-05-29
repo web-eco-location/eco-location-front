@@ -2,7 +2,7 @@ import React from "react";
 import './css/PercentMap.css';
 import boundaryData from "./boundary_percent.json";
 
-function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
+function polygon(map, boundary, bgData, data, sideInfo) { // 1회당 도/광역시 하나
     if(!bgData||!boundary) return;
 
     // 배경색 변경
@@ -37,7 +37,16 @@ function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
         
         customOverlay.setMap(null);
     };
-        
+
+    // 마우스클릭 - sideInfo(areaName) 실행 (RenewablePercent 함수) 
+    var mouseClickHandler = function() {
+        if(boundary.properties.CTP_KOR_NM.length>4) {
+            sideInfo(boundary.properties.CTP_KOR_NM.substr(0,2));
+        } else {
+            sideInfo(boundary.properties.CTP_KOR_NM.substr(0,1) + boundary.properties.CTP_KOR_NM.substr(boundary.properties.CTP_KOR_NM.length-2,1));
+        }
+    };
+    
     // 구역 이름 라벨 생성
     var content = document.createElement('div');
     content.className = 'label';
@@ -64,12 +73,12 @@ function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
     content.addEventListener('mouseleave', () => {
         polygons.forEach((polygon) => { polygon.setOptions({fillColor: backgroundColor}) });
         customInfo.style.display = 'none';
-    });
-      
+    });  
     content.addEventListener('mousemove', (event) => {
         customInfo.style.left = event.clientX - 125 + 'px';
         customInfo.style.top = event.clientY - 157 + 'px';
     });
+    content.addEventListener('click', mouseClickHandler);
     
     // 폴리곤 생성 (구역당 여러개일 수 있음)
     var polygons = [];
@@ -97,6 +106,7 @@ function polygon(map, boundary, bgData, data) { // 1회당 도/광역시 하나
         window.kakao.maps.event.addListener(polygon, 'mouseover', mouseOverHandler);
         window.kakao.maps.event.addListener(polygon, 'mousemove', mouseMoveHandler);
         window.kakao.maps.event.addListener(polygon, 'mouseout', mouseOutHandler);
+        window.kakao.maps.event.addListener(polygon, 'click', mouseClickHandler);
     });
 }
 
@@ -132,9 +142,7 @@ class KakaoMap extends React.Component {
     
         // 다각형 그리기
         this.props.items.forEach((item) => {
-            if(item.areaName==="소계") {
-                // 폴리곤 대신 지도 구석에 창 띄울 예정
-            } else {
+            if(item.areaName!=="소계") {
                 polygon(map, boundaryData.features.find((b) => {
                     if(b.properties.CTP_KOR_NM.length>4) { 
                         if(b.properties.CTP_KOR_NM.substr(0,2)===item.areaName) 
@@ -143,8 +151,7 @@ class KakaoMap extends React.Component {
                         if(b.properties.CTP_KOR_NM.substr(0,1) + b.properties.CTP_KOR_NM.substr(b.properties.CTP_KOR_NM.length-2,1)===item.areaName) 
                             return true;
                     }
-                }), this.props.bgData, item.renewableEnergyPercent);
-                // polygon(map, boundaryData.features.find((b) => b.properties.CTP_KOR_NM===item.areaName), this.props.bgData, item.potentialAmount);
+                }), this.props.bgData, item.renewableEnergyPercent, this.props.sideInfo);
             }
         });
     }
@@ -174,7 +181,6 @@ class KakaoMap extends React.Component {
     }
 
     render() {
-        console.log(this.props);
         return(
         <div className="mapContainer">
             <div id="map"></div>
