@@ -1,6 +1,6 @@
 import React from "react";
 import boundaryData from "./boundary_changed.json";
-import './css/PotentialMap.css'
+import './css/mapPage.css'
 
 function polygon(map, boundary, bgData, data, event) { // 1회당 도/광역시 하나 // 파라미터가 이게 맞나...
     // 배경색 변경

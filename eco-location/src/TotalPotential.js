@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/TotalPotential.css';
+import './css/mapPage.css';
 import Map from './PotentialMap';
 import {call} from './service/ApiService';
 import { ResponsivePie } from '@nivo/pie'
@@ -11,13 +11,12 @@ class MyResponsivePie extends React.Component { // 전체 데이터 파이 그�
         else if(this.props.by==="source1") valueKey = "solarEnergyPotential";
         else valueKey = "windEnergyPotential";
     
-        console.log(this.props.data);
         return ( 
             <ResponsivePie
                 data={this.props.data}
                 id="areaName"
                 value={valueKey}
-                margin={{ top: 40, right: 90, bottom: 80, left: 90 }}
+                margin={{ top: 40, right: 90, bottom: 20, left: 90 }}
                 innerRadius={0.5}
                 padAngle={0.7}
                 cornerRadius={0}
@@ -44,10 +43,10 @@ class MyResponsivePie extends React.Component { // 전체 데이터 파이 그�
                 }]}
                 fill={[
                     {
-                        match: {id: '충청남도'},
+                        match: {id: '전라남도'},
                         id: 'lines'
                     }, {
-                        match: {id: '충청북도'},
+                        match: {id: '전라북도'},
                         id: 'lines'
                     }, {
                         match: {id: '경기도'},
@@ -100,57 +99,49 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
             minValue = items.reduce((min, p) => p.solarEnergyPotential < min ? p.solarEnergyPotential : min, items[0].solarEnergyPotential); 
             d = (maxValue-minValue+1)/10;
             bg0 = "#";
-            bg1 = "F0000";
+            bg1 = "F2222";
         } else if(this.state.by=="source2") {
             maxValue = items.reduce((max, p) => p.windEnergyPotential > max ? p.windEnergyPotential : max, items[0].windEnergyPotential); 
             minValue = items.reduce((min, p) => p.windEnergyPotential < min ? p.windEnergyPotential : min, items[0].windEnergyPotential); 
-            d = (maxValue-minValue+1)/10;
+            d = (maxValue-minValue)/10;
             bg0 = "#2222";
             bg1 = "F";
+        } else {
+            maxValue = 0; 
+            minValue = 0; 
+            d = 0;
+            bg0 = "";
+            bg1 = "";
         }
 
         var newbgData = {"min": minValue, "d": d, "bg0": bg0, "bg1": bg1};
         if(JSON.stringify(this.state.bgData)!=JSON.stringify(newbgData)) {
-            this.setState({bgData: newbgData}, () => {this.drawLegend()});
+            this.setState({bgData: newbgData, loading:false}, () => {this.drawLegend(); this.sideInfo();});
         } 
     }
 
     drawLegend = () => {
         var legendContainer = document.querySelector(".legendContainer");
         legendContainer.innerHTML = "";
+        if(this.state.by==="null") return;
+
         for(var i=0; i<10; i++) {
             var backgroundColor = this.state.bgData.bg0+(15-i).toString(16)+this.state.bgData.bg1;
             var range = document.createElement("div");
             range.className = "range";
             range.innerHTML = "<div class='color' style='background-color:"+backgroundColor+"'></div>"+
                                 "<div class='lbl'>"+ 
-                                Math.round((this.state.bgData.min+i*this.state.bgData.d)*100)/100+" - "+ 
-                                Math.round((this.state.bgData.min+(i+1)*this.state.bgData.d-1)*100)/100 +
+                                    Math.round((this.state.bgData.min+i*this.state.bgData.d)/10)/100+" - "+ 
+                                    Math.round((this.state.bgData.min+(i+1)*this.state.bgData.d)/10)/100 +
                                 "</div>";
             legendContainer.appendChild(range);
         }
         
         var unit = document.createElement("div");
         unit.className = "small";
-        unit.innerHTML = "* 단위: W/m²"
+        unit.innerHTML = "* 단위: kW"
         legendContainer.appendChild(unit);
     };
-    
-    checkHandler = (e) => {
-        // 일단 둘다 풀면 둘다 체크되도록 했음... 다 풀리면 지도만 띄우는게 맞나? 
-        var checkboxs = document.getElementsByClassName("checkbox");
-        if(checkboxs[0].checked && checkboxs[1].checked) {  // 둘다 체크
-            this.setState({by:"total"}, () => {this.calcBackgroundColor(this.state.totalData); this.sideInfo();});
-        } else if(checkboxs[0].checked && !checkboxs[1].checked) {
-            this.setState({by:"source1"}, () => {this.calcBackgroundColor(this.state.sourceData); this.sideInfo();});
-        } else if(!checkboxs[0].checked && checkboxs[1].checked) {
-            this.setState({by:"source2"}, () => {this.calcBackgroundColor(this.state.sourceData); this.sideInfo();});
-        } else if(!checkboxs[0].checked && !checkboxs[1].checked) { // 둘다 미체크
-            checkboxs[0].checked = true;
-            checkboxs[1].checked = true;
-            this.setState({by:"total"}, () => {this.calcBackgroundColor(this.state.totalData)});
-        }
-    }
 
     sideInfo = () => {
         // 수정) 지도따라 전체데이터 + 설명 띄우기
@@ -174,17 +165,32 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
             info.innerHTML = "<div class='small'>* 단위: kW</div><br/>"+
                             "풍속이 가지고 있는 잠재량에 설비용량을 적용하여 에너지 생산량을 추정하여 제공"+
                             "<div class='small'>* "+year+"년 자료</div>";
+        } else {
+            title.innerHTML = "원하시는 발전원을 선택해주세요.";
+            info.innerHTML = "";
         }
         
+    }
+
+    checkHandler = (e) => {
+        var checkboxs = document.getElementsByClassName("checkbox");
+        if(checkboxs[0].checked && checkboxs[1].checked) {  // 둘다 체크
+            this.setState({by:"total"}, () => {this.calcBackgroundColor(this.state.totalData);});
+        } else if(checkboxs[0].checked && !checkboxs[1].checked) {
+            this.setState({by:"source1"}, () => {this.calcBackgroundColor(this.state.sourceData);});
+        } else if(!checkboxs[0].checked && checkboxs[1].checked) {
+            this.setState({by:"source2"}, () => {this.calcBackgroundColor(this.state.sourceData);});
+        } else if(!checkboxs[0].checked && !checkboxs[1].checked) { // 둘다 미체크
+            this.setState({by:"null"}, () => {this.calcBackgroundColor(this.state.sourceData);});
+        }
     }
     
     componentDidMount() {
         // 실제 사용
         const year = new Date().getFullYear() -1;
         call("/energy-potential/source?year="+year, "GET", null).then((response) =>
-            this.setState({by:"total", totalData:response, loading:false}, () => {
+            this.setState({by:"total", totalData:response}, () => {
                 this.calcBackgroundColor(response); 
-                this.sideInfo();
             })
         );
             
@@ -195,14 +201,14 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
     
     render() {
         var map, pie;
-        if(this.state.totalData&&this.state.by=="total") {
+        if(this.state.by==="total") {
             map = this.state.totalData.length>0&&(<Map by={this.state.by} items={this.state.totalData} bgData={this.state.bgData} />);
             pie = this.state.totalData.length>0&&(<MyResponsivePie by={this.state.by} data={this.state.totalData} />);
-        } else if (this.state.sourceData) {
+        } else if (this.state.by!=="null") {
             map = this.state.sourceData.length>0&&(<Map by={this.state.by} items={this.state.sourceData} bgData={this.state.bgData} />);
-            pie = this.state.totalData.length>0&&(<MyResponsivePie by={this.state.by} data={this.state.sourceData} />);
-        } else {
-            map = <div className='mapContainer'></div>
+            pie = this.state.sourceData.length>0&&(<MyResponsivePie by={this.state.by} data={this.state.sourceData} />);
+        } else {    // null일 경우
+            map = <Map by={this.state.by} />
             pie = <div className='pieContainer'></div>
         }
 
@@ -220,7 +226,7 @@ class TotalPotential extends React.Component { // 지역별 잠재량 페이지
                     </label>
                 </div>
             </div>
-            <div className='side'>
+            <div className='sideArea'>
                 <div className='title'></div>
                 <div className="pieContainer">
                     {pie}

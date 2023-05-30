@@ -1,5 +1,5 @@
 import React from "react";
-import './css/PercentMap.css';
+import './css/mapPage.css';
 import boundaryData from "./boundary_percent.json";
 
 function polygon(map, boundary, bgData, data, sideInfo) { // 1회당 도/광역시 하나
@@ -12,7 +12,7 @@ function polygon(map, boundary, bgData, data, sideInfo) { // 1회당 도/광역�
     // 이벤트
     var customOverlay = new window.kakao.maps.CustomOverlay({});
     var innerContent = "<div class='title'>"+boundary.properties.CTP_KOR_NM+" 재생에너지 생산 비율</div>"+
-                        "<div class='info'>"+data+"%</div>";
+                        "<div class='info'>"+Math.round(data*10000)/100+"%</div>";
 
     // 마우스오버 - 배경색 변경 + 커스텀오버레이 표시
     var mouseOverHandler = function(mouseEvent) {
