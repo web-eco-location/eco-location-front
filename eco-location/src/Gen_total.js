@@ -335,6 +335,8 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
     drawLegend = () => {//그리기
         var legendContainer = document.querySelector(".legendContainer");
         legendContainer.innerHTML = "";
+        if(this.state.by==="null") return;
+        
         for(var i=0; i<10; i++) {
             var backgroundColor = this.state.bgData.bg0+(15-i).toString(16)+this.state.bgData.bg1;
             var range = document.createElement("div");
@@ -365,9 +367,7 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
         } else if(!checkboxs[0].checked && checkboxs[1].checked) {
             this.setState({by:"source2"}, () => {this.calcBackgroundColor(this.state.sourceData)});
         } else if(!checkboxs[0].checked && !checkboxs[1].checked) { // 둘다 미체크
-            checkboxs[0].checked = true;
-            checkboxs[1].checked = true;
-            this.setState({by:"total"}, () => {this.calcBackgroundColor(this.state.totalData)});
+            this.setState({by:"null"}, () => {this.calcBackgroundColor(this.state.sourceData);});
         }
     }
 
