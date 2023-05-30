@@ -112,10 +112,10 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
             extractedYearData:[],
             responseJson: null,
             error: null,
-            year: "2020",
+            year: "2022",
             arr: [],
             selectedOption:null,
-            selected_year:'2020',
+            selected_year:'2022',
             sel_year:'',
             allyeardata:[],
             MakeBar:null
@@ -203,7 +203,7 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
         }
   };
 
-  handle_GenApi_Search = (e) => {//첫 실행시 데이터 불러오기(디폴트 year=2020). handleChange랑 합치는법 몰라
+  handle_GenApi_Search = (e) => {//첫 실행시 데이터 불러오기(디폴트 year=2022). 
 
     const { year } = this.state;
     console.log('year',year);
@@ -490,7 +490,7 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
                             value={selectedOption}
                             onChange={this.handleChange}
                             options={sel_year}
-                            placeholder='2020'
+                            placeholder='2022'
                             />        
                         </div>
                     </div>
