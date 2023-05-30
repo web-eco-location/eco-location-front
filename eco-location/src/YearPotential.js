@@ -146,12 +146,12 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
                 <div className='datetimeContainer'>
                     기간:
                     <div className='selectWrap'>
-                        <select id="startYear" name="startYear" defaultValue={"2020"} onChange={this.handleChange}>
+                        <select id="startYear" name="startYear" defaultValue={"2022"} onChange={this.handleChange}>
                             <option value="2020">2020년</option>
                             <option value="2021">2021년</option>
                             <option value="2022">2022년</option>
                         </select>
-                        <select id="startMonth" name="startMonth" defaultValue={"01"} onChange={this.handleChange}>
+                        <select id="startMonth" name="startMonth" defaultValue={"08"} onChange={this.handleChange}>
                             <option value="01">1월</option>
                             <option value="02">2월</option>
                             <option value="03">3월</option>
@@ -168,7 +168,7 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
                     </div>
                     ㅡ
                     <div className='selectWrap'>
-                        <select id="endYear" name="endYear" defaultValue={"2020"} onChange={this.handleChange}>
+                        <select id="endYear" name="endYear" defaultValue={"2022"} onChange={this.handleChange}>
                             <option value="2020">2020년</option>
                             <option value="2021">2021년</option>
                             <option value="2022">2022년</option>
