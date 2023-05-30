@@ -1,5 +1,5 @@
-import {API_BASE_URL} from "./app-config.js";
-
+//import {API_BASE_URL} from "./app-config.js";
+let API_BASE_URL = "http://133.186.241.15:8080"
 
 export function call(api, method, request){
     let headers = new Headers({
