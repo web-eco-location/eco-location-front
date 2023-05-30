@@ -135,7 +135,7 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
             { "areaName": "전라북도", "태양에너지":0, "풍력에너지":0 },
             { "areaName": "경기도", "태양에너지":0, "풍력에너지":0 }
         ];
-        this.setState({startYear: "2020", startMonth: "01", endYear: "2020", endMonth: "12", items:emptyData, today:formattedDate, loading:false}, this.drawGraph);
+        this.setState({startYear: "2022", startMonth: "08", endYear: "2022", endMonth: "12", items:emptyData, today:formattedDate, loading:false}, this.drawGraph);
     }
     
     render() {
