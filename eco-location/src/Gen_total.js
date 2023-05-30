@@ -347,8 +347,8 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
         "<div class='info'>"+'풍력에너지:'+data[7].generateWindAmountAverage+"</div>"+
         "<div class='info'>"+" "+"</div>"
         
-        
         console.log(areaName);
+
       }
     
     componentDidMount() {
