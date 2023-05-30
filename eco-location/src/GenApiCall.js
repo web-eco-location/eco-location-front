@@ -1,5 +1,5 @@
-//import {API_BASE_URL} from "./app-config.js";
-let API_BASE_URL = "http://133.186.241.15:8080"
+import {API_BASE_URL_NOT_ES} from "./app-config.js";
+
 
 export function call(api, method, request){
     let headers = new Headers({
@@ -8,7 +8,7 @@ export function call(api, method, request){
 
     let options = {
         headers: headers,
-        url:API_BASE_URL + api,
+        url:API_BASE_URL_NOT_ES + api,
         method: method,
     };
     if(request){
