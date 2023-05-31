@@ -130,10 +130,10 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
             extractedYearData:[],
             responseJson: null,
             error: null,
-            year: "2020",
+            year: "2022",
             arr: [],
             selectedOption:null,
-            selected_year:'2020',
+            selected_year:'2022',
             sel_year:'',
             allyeardata:[],
             selectedArea:"",
@@ -220,7 +220,8 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
     }
   };
 
-  handle_GenApi_Search = (e) => {//첫 실행시 데이터 불러오기(디폴트 year=2020). handleChange랑 합치는법 몰라
+  handle_GenApi_Search = (e) => {//첫 실행시 데이터 불러오기(디폴트 year=2022). 
+
     const { year } = this.state;
     console.log('year',year);
     GenApiCall(year)
@@ -358,7 +359,6 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
         var legendContainer = document.querySelector(".legendContainer");
         legendContainer.innerHTML = "";
         if(this.state.by==="null") return;
-
         for(var i=0; i<10; i++) {
             var backgroundColor = this.state.bgData.bg0+(15-i).toString(16)+this.state.bgData.bg1;
             var range = document.createElement("div");
@@ -411,9 +411,7 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
         } else if(!checkboxs[0].checked && checkboxs[1].checked) {
             this.setState({by:"source2"}, () => {this.calcBackgroundColor(this.state.sourceData)});
         } else if(!checkboxs[0].checked && !checkboxs[1].checked) { // 둘다 미체크
-            checkboxs[0].checked = true;
-            checkboxs[1].checked = true;
-            this.setState({by:"total"}, () => {this.calcBackgroundColor(this.state.totalData)});
+            this.setState({by:"null"}, () => {this.calcBackgroundColor(this.state.sourceData);});
         }
     }
 
@@ -487,7 +485,7 @@ class Gen_total extends React.Component { // 지역별 발전량 페이지
                             value={selectedOption}
                             onChange={this.handleChange}
                             options={sel_year}
-                            placeholder='2020'
+                            placeholder='2022'
                             />        
                         </div>
                     </div>

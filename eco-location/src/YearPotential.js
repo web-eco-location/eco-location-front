@@ -1,7 +1,7 @@
 import React from 'react';
 import './css/YearPotential.css';
 import PotentialGraph from './PotentialGraph';
-import { call } from './service/ApiService';
+import { call_for_not_es } from './service/ApiService';
 
 class YearPotential extends React.Component { // 시간별 잠재량 페이지
     constructor(props) {
@@ -64,7 +64,7 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
         emptyInfo.style.display="block";
 
         // 실제 데이터 요청
-        call("/es/energy-potential?from="+start+"&to="+end, "GET", null).then((response) =>
+        call_for_not_es("/energy-potential?from="+start+"&to="+end, "GET", null).then((response) =>
             this.setState(this.dataCleaning(response), () => {
                 emptyInfo.innerHTML = "조회된 데이터가 없습니다.";
                 if(!this.state.isEmpty) emptyInfo.style.display="none";
