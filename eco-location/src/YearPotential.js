@@ -64,7 +64,7 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
         emptyInfo.style.display="block";
 
         // 실제 데이터 요청
-        call("/energy-potential?from="+start+"&to="+end, "GET", null).then((response) =>
+        call("/es/energy-potential?from="+start+"&to="+end, "GET", null).then((response) =>
             this.setState(this.dataCleaning(response), () => {
                 emptyInfo.innerHTML = "조회된 데이터가 없습니다.";
                 if(!this.state.isEmpty) emptyInfo.style.display="none";
@@ -135,7 +135,16 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
             { "areaName": "전라북도", "태양에너지":0, "풍력에너지":0 },
             { "areaName": "경기도", "태양에너지":0, "풍력에너지":0 }
         ];
-        this.setState({startYear: "2020", startMonth: "01", endYear: "2020", endMonth: "12", items:emptyData, today:formattedDate, loading:false}, this.drawGraph);
+        this.setState({startYear: "2022", startMonth: "05", endYear: "2022", endMonth: "09", items:emptyData, today:formattedDate, loading:false}, this.drawGraph);
+
+        // 네비게이션바 현재위치 색넣기 (단순무식하게 구현)
+        const nav = document.getElementsByClassName("item");
+        for(var i=0; i<nav.length; i++) {
+            if(i===2)
+                nav[i].style.background = "#DDD";
+            else
+                nav[i].style.background = "#FFF";
+        }
     }
     
     render() {
@@ -146,12 +155,12 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
                 <div className='datetimeContainer'>
                     기간:
                     <div className='selectWrap'>
-                        <select id="startYear" name="startYear" defaultValue={"2020"} onChange={this.handleChange}>
+                        <select id="startYear" name="startYear" defaultValue={"2022"} onChange={this.handleChange}>
                             <option value="2020">2020년</option>
                             <option value="2021">2021년</option>
                             <option value="2022">2022년</option>
                         </select>
-                        <select id="startMonth" name="startMonth" defaultValue={"01"} onChange={this.handleChange}>
+                        <select id="startMonth" name="startMonth" defaultValue={"05"} onChange={this.handleChange}>
                             <option value="01">1월</option>
                             <option value="02">2월</option>
                             <option value="03">3월</option>
@@ -168,12 +177,12 @@ class YearPotential extends React.Component { // 시간별 잠재량 페이지
                     </div>
                     ㅡ
                     <div className='selectWrap'>
-                        <select id="endYear" name="endYear" defaultValue={"2020"} onChange={this.handleChange}>
+                        <select id="endYear" name="endYear" defaultValue={"2022"} onChange={this.handleChange}>
                             <option value="2020">2020년</option>
                             <option value="2021">2021년</option>
                             <option value="2022">2022년</option>
                         </select>
-                        <select id="endMonth" name="endMonth" defaultValue={"12"} onChange={this.handleChange}>
+                        <select id="endMonth" name="endMonth" defaultValue={"09"} onChange={this.handleChange}>
                             <option value="01">1월</option>
                             <option value="02">2월</option>
                             <option value="03">3월</option>
